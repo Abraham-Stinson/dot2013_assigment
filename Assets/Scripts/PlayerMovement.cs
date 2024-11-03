@@ -29,7 +29,7 @@ public class PlayerMovement : MonoBehaviour
         playerStatus = "idle";
         if (isDash)
         {
-            playerStatus = "dash";
+            
             transform.Translate(dashSpeed * dashDirection * Time.deltaTime);
 
             dashTimer -= Time.deltaTime;
@@ -39,8 +39,8 @@ public class PlayerMovement : MonoBehaviour
             }
         }
         else  {
-            walking();
-            dashInput();
+            
+            playerInput();
         }
         Debug.Log(playerStatus);
     }
@@ -53,22 +53,32 @@ public class PlayerMovement : MonoBehaviour
 
     }
 
-    void dashInput()
+    void playerInput()
     {
         if (Input.GetKeyDown(KeyCode.A))
         {
-            if(Time.time - lastTapTimeA < doubleTabTime)
+            playerStatus = "dashingLeft";
+            if (Time.time - lastTapTimeA < doubleTabTime)
             {
                 StartDash(Vector2.left);
+            }
+            else
+            {
+                walking();
             }
             lastTapTimeA = Time.time;
         }
 
         if (Input.GetKeyDown(KeyCode.D))
         {
+            playerStatus = "dashingRight";
             if (Time.time - lastTapTimeD < doubleTabTime)
             {
                 StartDash(Vector2.right);
+            }
+            else
+            {
+                walking();
             }
             lastTapTimeD = Time.time;
         }
