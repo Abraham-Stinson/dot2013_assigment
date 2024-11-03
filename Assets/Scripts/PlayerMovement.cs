@@ -5,15 +5,18 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    string playerStatus;
     float speed = 5f;
     float dashSpeed = 20f;
     float dashTime = 0.2f;
     float doubleTabTime = 0.2f;
 
-    private float lastTa,pTimeA, lastTapTimeD;
+
+    private float lastTapTimeA, lastTapTimeD;
     private bool isDash;
     private Vector2 dashDirection;
     private float dashTimer;
+
     void Start()
     {
         
@@ -22,15 +25,59 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float xMovement = Input.GetAxis("Horizontal");
-        transform.position += new Vector3(speed * xMovement * Time.deltaTime, 0, 0);
 
+        playerStatus = "idle";
         if (isDash)
         {
+            playerStatus = "dash";
+            transform.Translate(dashSpeed * dashDirection * Time.deltaTime);
 
+            dashTimer -= Time.deltaTime;
+            if (dashTimer < 0)
+            {
+                isDash = false;
+            }
         }
+        else  {
+            walking();
+            dashInput();
+        }
+        Debug.Log(playerStatus);
+    }
+    void walking()
+    {
+        
+        float xMovement = Input.GetAxis("Horizontal");
+        transform.position += new Vector3(speed * xMovement * Time.deltaTime, 0, 0);
+        playerStatus = "walking";
 
     }
 
-    
+    void dashInput()
+    {
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            if(Time.time - lastTapTimeA < doubleTabTime)
+            {
+                StartDash(Vector2.left);
+            }
+            lastTapTimeA = Time.time;
+        }
+
+        if (Input.GetKeyDown(KeyCode.D))
+        {
+            if (Time.time - lastTapTimeD < doubleTabTime)
+            {
+                StartDash(Vector2.right);
+            }
+            lastTapTimeD = Time.time;
+        }
+    }
+
+    private void StartDash(Vector2 direction)
+    {
+        isDash = true;
+        dashDirection = direction;
+        dashTimer = dashTime;
+    }
 }
