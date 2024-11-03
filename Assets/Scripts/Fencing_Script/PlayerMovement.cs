@@ -25,8 +25,6 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-        
         if (isDash)
         {
             
@@ -49,11 +47,16 @@ public class PlayerMovement : MonoBehaviour
         
         float xMovement = Input.GetAxis("Horizontal");
         transform.position += new Vector3(speed * xMovement * Time.deltaTime, 0, 0);
-        if (Input.GetAxis("Horizontal") != 0)
+        if (Input.GetAxis("Horizontal") >= 0.10)
         {
-            playerStatus = "walking";
+            playerStatus = "walkingRight";
         }
-        else {
+        else if (Input.GetAxis("Horizontal") <= -0.10)
+        {
+            playerStatus = "walkingLeft";
+        }
+        else
+        {
             playerStatus = "idle";
         }
 
