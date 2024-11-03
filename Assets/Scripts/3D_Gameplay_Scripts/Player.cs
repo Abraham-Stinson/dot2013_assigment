@@ -13,6 +13,7 @@ public class Player : MonoBehaviour
     {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+        Screen.SetResolution(320, 240, Screen.fullScreen);
     }
 
     // Update is called once per frame
