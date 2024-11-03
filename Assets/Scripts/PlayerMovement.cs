@@ -26,7 +26,7 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
 
-        playerStatus = "idle";
+        
         if (isDash)
         {
             
@@ -39,8 +39,8 @@ public class PlayerMovement : MonoBehaviour
             }
         }
         else  {
-            
-            playerInput();
+            walking();
+            dashInput();
         }
         Debug.Log(playerStatus);
     }
@@ -49,36 +49,36 @@ public class PlayerMovement : MonoBehaviour
         
         float xMovement = Input.GetAxis("Horizontal");
         transform.position += new Vector3(speed * xMovement * Time.deltaTime, 0, 0);
-        playerStatus = "walking";
+        if (Input.GetAxis("Horizontal") != 0)
+        {
+            playerStatus = "walking";
+        }
+        else {
+            playerStatus = "idle";
+        }
 
     }
 
-    void playerInput()
+    void dashInput()
     {
         if (Input.GetKeyDown(KeyCode.A))
         {
-            playerStatus = "dashingLeft";
+            
             if (Time.time - lastTapTimeA < doubleTabTime)
             {
                 StartDash(Vector2.left);
-            }
-            else
-            {
-                walking();
+                playerStatus = "dashingLeft";
             }
             lastTapTimeA = Time.time;
         }
 
         if (Input.GetKeyDown(KeyCode.D))
         {
-            playerStatus = "dashingRight";
+            
             if (Time.time - lastTapTimeD < doubleTabTime)
             {
                 StartDash(Vector2.right);
-            }
-            else
-            {
-                walking();
+                playerStatus = "dashingRight";
             }
             lastTapTimeD = Time.time;
         }
