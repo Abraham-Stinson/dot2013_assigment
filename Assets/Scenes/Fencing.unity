@@ -518,6 +518,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   firstPlayer: {fileID: 1596073008}
   secondPlayer: {fileID: 1936304924}
+<<<<<<< HEAD
 --- !u!1 &544202282
 GameObject:
   m_ObjectHideFlags: 0
@@ -818,6 +819,8 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+=======
+>>>>>>> omer_faruk
 --- !u!1 &1177159212
 GameObject:
   m_ObjectHideFlags: 0
