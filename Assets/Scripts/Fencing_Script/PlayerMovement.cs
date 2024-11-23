@@ -12,7 +12,7 @@ public class PlayerMovement : MonoBehaviour
     public GameObject Player_1;
     public Combat combatScript;
 
-    
+
     public Text movement_status_text_ui;
 
     public string playerStatusMoving;
@@ -63,7 +63,7 @@ public class PlayerMovement : MonoBehaviour
     }
     void walking()
     {
-        
+
         float xMovement = Input.GetAxis("Horizontal");
         transform.position += new Vector3(speed * xMovement * Time.deltaTime, 0, 0);
         if (Input.GetAxis("Horizontal") >= 0.10)
@@ -85,10 +85,10 @@ public class PlayerMovement : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.A))
         {
-            
+
             if (Time.time - lastTapTimeA < doubleTabTime)
             {
-                if(stamina >= 15)
+                if (stamina >= 15)
                 {
                     StartDash(Vector2.left);
                     playerStatusMoving = "dashingLeft";
@@ -105,10 +105,10 @@ public class PlayerMovement : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.D))
         {
-            
+
             if (Time.time - lastTapTimeD < doubleTabTime)
             {
-                if(stamina >= 15)
+                if (stamina >= 15)
                 {
                     StartDash(Vector2.right);
                     playerStatusMoving = "dashingRight";

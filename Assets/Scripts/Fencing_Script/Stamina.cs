@@ -6,8 +6,8 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class Stamina : MonoBehaviour
-{   
-    
+{
+
     public GameObject Player_1;
 
 
@@ -19,9 +19,9 @@ public class Stamina : MonoBehaviour
     public Text stamineUIText;
     void Start()
     {
-         combatScript = Player_1.GetComponent<Combat>();
-         playerMovementScript =  Player_1.GetComponent<PlayerMovement>();
-         stamineUIText.text = "";
+        combatScript = Player_1.GetComponent<Combat>();
+        playerMovementScript = Player_1.GetComponent<PlayerMovement>();
+        stamineUIText.text = "";
     }
 
     // Update is called once per frame
