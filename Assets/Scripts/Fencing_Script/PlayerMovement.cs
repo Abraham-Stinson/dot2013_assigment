@@ -17,6 +17,7 @@ public class PlayerMovement : MonoBehaviour
     private Vector2 dashDirection;
     private float dashTimer;
 
+
     void Start()
     {
         
@@ -40,7 +41,7 @@ public class PlayerMovement : MonoBehaviour
             walking();
             dashInput();
         }
-        Debug.Log(playerStatus);
+        //Debug.Log(playerStatus);
     }
     void walking()
     {
