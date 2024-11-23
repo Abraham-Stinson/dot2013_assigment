@@ -1,126 +1,188 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditor.Build.Content;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Combat : MonoBehaviour
 {
-    public BoxCollider2D foe;
+    bool canAttackorDefence=true;
+    public GameObject StaminaController;
+    public Stamina staminaScript;
+
+    public GameObject Player_1;
+    public PlayerMovement playerMovementScript;
+
+    public GameObject Stunned_Player_1;
+    public Text stunnedUIText;
+
+    
+    public Text combat_status_text_ui;
+
+    public Transform attackPointTop, attackPointBottom;
+    public float attackRange = 0.5f;
+
+    public LayerMask oppositePlayer;
+    
+
+
     public float swordSpeed = 5f, swingSpeed = 100f;
     public float targetAngelY, targetAngelZ;
-    private BoxCollider2D playerSabre;
     public string playerStatusCombat;
+
+
+
     void Start()
     {
-        playerSabre = this.GetComponent<BoxCollider2D>();
+        staminaScript = StaminaController.GetComponent<Stamina>();
+        playerMovementScript = Player_1.GetComponent<PlayerMovement>();
+        stunnedUIText.text = "start and no stun";
+        combat_status_text_ui.text = "";
     }
 
-    // Update is called once per frame
+
     void Update()
     {
-        if (Input.GetMouseButton(0))
+        combat_status_text_ui.text= playerStatusCombat;
+        float PlayerStamina=staminaScript.stamina;
+        if (canAttackorDefence)
         {
-            if (Input.GetKey(KeyCode.W)&& !Input.GetMouseButtonUp(0))
+            if (Input.GetMouseButton(0))
             {
-                topAttackWait();
+                if (Input.GetKeyDown(KeyCode.W))
+                {
+                    if (PlayerStamina >= 20)
+                    {
+                        topAttacking();
+                        StartCoroutine(WaitForSeconds());
+                    }
+                    else
+                    {
+                        stunned(3f);
+                    }
+                }
+                else if (Input.GetKeyDown(KeyCode.S))
+                {
+                    if (PlayerStamina >= 20)
+                    {
+                        bottomAttacking();
+                        StartCoroutine(WaitForSeconds());
+                    }
+                    else
+                    {
+                        stunned(3f);
+                    }
+                }
+                else
+                {
+                    attackIdlePosition();
+                }
             }
 
-            else if (Input.GetKey(KeyCode.S) && !Input.GetMouseButtonUp(0))
+            else if (Input.GetMouseButton(1))
             {
-                bottomAttackWait();
-            }
-
-            else if (Input.GetKeyUp(KeyCode.W) && Input.GetMouseButtonUp(0))
-            {
-                topAttacking();
-            }
-
-            else if (Input.GetKeyUp(KeyCode.S) && Input.GetMouseButtonUp(0))
-            {
-                bottomAttacking();
+                if (Input.GetKey(KeyCode.W))
+                {
+                    topDefence();
+                }
+                else if (Input.GetKey(KeyCode.S))
+                {
+                    bottomDefence();
+                }
+                else
+                {
+                    defendIdlePosition();
+                }
             }
 
             else
             {
-                attackIdlePosition();
+                idlePosition();
             }
         }
 
-        else if (Input.GetMouseButton(1))
-        {
-            if (Input.GetKey(KeyCode.W))
-            {
-                topDefence();
-            }
-            else if (Input.GetKey(KeyCode.S))
-            {
-                bottomDefence();
-            }
-            else
-            {
-                defendIdlePosition();
-            }
-        }
-
-        else
-        {
-            idlePosition();
-        }
-
-    }
-
-    void topAttackWait()
-    {
-        Debug.Log("Top Attack");
-        changeRotate(45f, 45f);
-    }
-
-    void bottomAttackWait()
-    {
-        Debug.Log("Bot Attack");
-        changeRotate(45f, -30f);
     }
 
     void topAttacking()
     {
-        changeRotate(-30f, -30f);
+        //top attack animation
+        staminaScript.staminaCost(20f);
+        playerStatusCombat = "top_attack";
+        //StartCoroutine(WaitForSeconds());
+        Collider2D[] hitEnemy = Physics2D.OverlapCircleAll(attackPointTop.position, attackRange, oppositePlayer);
+        foreach (Collider2D Player_2 in hitEnemy)
+        {
+            Debug.Log("Hit to player 2");
+        }
     }
     void bottomAttacking()
     {
-        changeRotate(30f, -30f);
+        //top attack animation
+        staminaScript.staminaCost(20f);
+        playerStatusCombat = "bot_attack";
+        
+        Collider2D[] hitEnemy = Physics2D.OverlapCircleAll(attackPointBottom.position, attackRange, oppositePlayer);
+        foreach (Collider2D Player_2 in hitEnemy)
+        {
+            Debug.Log("Hit to player 2");
+        }
     }
-
 
     void topDefence()
     {
-        Debug.Log("Top Defence");
+        //top defence  animation
+        playerStatusCombat = "top_defence";
     }
 
     void bottomDefence()
     {
-        Debug.Log("Bot Defence");
+        //bot defence  animation
+        playerStatusCombat = "bottom_defence";
     }
 
     void attackIdlePosition()
     {
-        changeRotate(45f, 0f);
+        //attack idle animation
+        playerStatusCombat = "attack idle";
     }
     void defendIdlePosition()
     {
-
+        //defend idle animation
+        playerStatusCombat = "defend idle";
     }
-
-    
     void idlePosition()
     {
-        changeRotate(0f, 0f);
+        //idle position animation
+        playerStatusCombat = "idle";
     }
 
-    void changeRotate(float targetAngelY, float targetAngelZ)
+    public void stunned(float duration)
     {
-        Quaternion currentRotation = transform.rotation;
-        Quaternion targetRotation = Quaternion.Euler(0, targetAngelY, targetAngelZ);
-
-        transform.rotation = Quaternion.Lerp(currentRotation, targetRotation, swordSpeed * Time.deltaTime);
+        StartCoroutine(StunCoroutine(duration));
     }
+
+    private IEnumerator StunCoroutine(float stunDuration)
+    {
+        playerMovementScript.canMove = false;
+        canAttackorDefence = false;
+
+        //stun animation
+        stunnedUIText.text = "Stunned";
+        playerStatusCombat = "stunned";
+        yield return new WaitForSeconds(stunDuration);
+        stunnedUIText.text = "no stunned";
+        playerMovementScript.canMove = true;
+        canAttackorDefence = true;
+
+        playerStatusCombat = "idle";
+    }
+
+    IEnumerator WaitForSeconds()
+    {
+        yield return new WaitForSeconds(10f);
+    }
+
 }
+

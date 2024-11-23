@@ -2,10 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerMovement : MonoBehaviour
 {
-    string playerStatus;
+    public GameObject StaminaController;
+    public Stamina staminaScript;
+
+    public GameObject Player_1;
+    public Combat combatScript;
+
+    
+    public Text movement_status_text_ui;
+
+    public string playerStatusMoving;
     float speed = 5f;
     float dashSpeed = 20f;
     float dashTime = 0.2f;
@@ -17,31 +27,39 @@ public class PlayerMovement : MonoBehaviour
     private Vector2 dashDirection;
     private float dashTimer;
 
-
+    protected internal bool canMove = true;
     void Start()
     {
-        
+        staminaScript = StaminaController.GetComponent<Stamina>();
+        combatScript = Player_1.GetComponent<Combat>();
+        movement_status_text_ui.text = " ";
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (isDash)
+        float PlayerStamina = staminaScript.stamina;
+        movement_status_text_ui.text = playerStatusMoving;
+        if (canMove)
         {
-            
-            transform.Translate(dashSpeed * dashDirection * Time.deltaTime);
-
-            dashTimer -= Time.deltaTime;
-            if (dashTimer < 0)
+            if (isDash)
             {
-                isDash = false;
+
+                transform.Translate(dashSpeed * dashDirection * Time.deltaTime);
+
+                dashTimer -= Time.deltaTime;
+                if (dashTimer < 0)
+                {
+                    isDash = false;
+                }
             }
+            else
+            {
+                walking();
+                dashInput(PlayerStamina);
+            }
+            //Debug.Log(playerStatus);
         }
-        else  {
-            walking();
-            dashInput();
-        }
-        //Debug.Log(playerStatus);
     }
     void walking()
     {
@@ -50,28 +68,37 @@ public class PlayerMovement : MonoBehaviour
         transform.position += new Vector3(speed * xMovement * Time.deltaTime, 0, 0);
         if (Input.GetAxis("Horizontal") >= 0.10)
         {
-            playerStatus = "walkingRight";
+            playerStatusMoving = "walkingRight";
         }
         else if (Input.GetAxis("Horizontal") <= -0.10)
         {
-            playerStatus = "walkingLeft";
+            playerStatusMoving = "walkingLeft";
         }
         else
         {
-            playerStatus = "idle";
+            playerStatusMoving = "idle";
         }
 
     }
 
-    void dashInput()
+    void dashInput(float stamina)
     {
         if (Input.GetKeyDown(KeyCode.A))
         {
             
             if (Time.time - lastTapTimeA < doubleTabTime)
             {
-                StartDash(Vector2.left);
-                playerStatus = "dashingLeft";
+                if(stamina >= 15)
+                {
+                    StartDash(Vector2.left);
+                    playerStatusMoving = "dashingLeft";
+                    staminaScript.staminaCost(15f);
+                }
+                else if (stamina < 15)
+                {
+                    combatScript.stunned(2f);
+                }
+
             }
             lastTapTimeA = Time.time;
         }
@@ -81,8 +108,16 @@ public class PlayerMovement : MonoBehaviour
             
             if (Time.time - lastTapTimeD < doubleTabTime)
             {
-                StartDash(Vector2.right);
-                playerStatus = "dashingRight";
+                if(stamina >= 15)
+                {
+                    StartDash(Vector2.right);
+                    playerStatusMoving = "dashingRight";
+                    staminaScript.staminaCost(15f);
+                }
+                else if (stamina < 15)
+                {
+                    combatScript.stunned(2f);
+                }
             }
             lastTapTimeD = Time.time;
         }
