@@ -117,6 +117,10 @@ public class Combat : MonoBehaviour
             Debug.Log("Hit to player 2");
         }
     }
+    private void OnDrawGizmosSelected()
+    {
+        
+    }
     void bottomAttacking()
     {
         //top attack animation
@@ -184,5 +188,6 @@ public class Combat : MonoBehaviour
         yield return new WaitForSeconds(10f);
     }
 
+    
 }
 
