@@ -119,7 +119,6 @@ public class Combat : MonoBehaviour
     }
     private void OnDrawGizmosSelected()
     {
-
     }
     void bottomAttacking()
     {
