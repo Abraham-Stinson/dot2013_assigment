@@ -69,7 +69,7 @@ public class Combat : MonoBehaviour
 
     }
     void test() {
-        Debug.Log("asdsadasdasdsaasdasdadsda");
+        Debug.Log("asdsadasdasdsaasdasdadsdasadfasdfdasfsadfs");
     }
     void topAttackWait()
     {
