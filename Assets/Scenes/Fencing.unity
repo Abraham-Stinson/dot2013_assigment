@@ -518,7 +518,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   firstPlayer: {fileID: 1596073008}
   secondPlayer: {fileID: 1936304924}
-<<<<<<< HEAD
 --- !u!1 &544202282
 GameObject:
   m_ObjectHideFlags: 0
@@ -819,8 +818,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-=======
->>>>>>> omer_faruk
 --- !u!1 &1177159212
 GameObject:
   m_ObjectHideFlags: 0
@@ -905,7 +902,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1345832862
+--- !u!1 &1446376109
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -913,38 +910,7 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1345832863}
-  m_Layer: 0
-  m_Name: AttackPointBot
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1345832863
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1345832862}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1, y: -0.5, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1596073008}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1455650550
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1455650551}
+  - component: {fileID: 1446376110}
   m_Layer: 0
   m_Name: AttackPointTop
   m_TagString: Untagged
@@ -952,13 +918,13 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &1455650551
+--- !u!4 &1446376110
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1455650550}
+  m_GameObject: {fileID: 1446376109}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 1, y: 0.5, z: 0}
@@ -1080,8 +1046,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1455650551}
-  - {fileID: 1345832863}
+  - {fileID: 1446376110}
+  - {fileID: 1921595149}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1596073009
@@ -1156,12 +1122,12 @@ MonoBehaviour:
   Stunned_Player_1: {fileID: 128281689}
   stunnedUIText: {fileID: 128281691}
   combat_status_text_ui: {fileID: 1597995000}
-  attackPointTop: {fileID: 1455650551}
-  attackPointBottom: {fileID: 1345832863}
+  attackPointTop: {fileID: 1446376110}
+  attackPointBottom: {fileID: 1921595149}
   attackRange: 0.5
   oppositePlayer:
     serializedVersion: 2
-    m_Bits: 256
+    m_Bits: 0
   swordSpeed: 5
   swingSpeed: 100
   targetAngelY: 0
@@ -1246,6 +1212,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1597994998}
   m_CullTransparentMesh: 1
+--- !u!1 &1921595148
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1921595149}
+  m_Layer: 0
+  m_Name: AttackPointBot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1921595149
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1921595148}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 1, y: 0.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1596073008}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1936304920
 GameObject:
   m_ObjectHideFlags: 0
@@ -1408,10 +1405,10 @@ Transform:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 519420032}
   - {fileID: 437978071}
+  - {fileID: 519420032}
+  - {fileID: 784428110}
   - {fileID: 1177159214}
   - {fileID: 1596073008}
   - {fileID: 1936304924}
   - {fileID: 1138371218}
-  - {fileID: 784428110}

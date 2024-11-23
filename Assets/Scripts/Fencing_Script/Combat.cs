@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 public class Combat : MonoBehaviour
 {
-    bool canAttackorDefence=true;
+    bool canAttackorDefence = true;
     public GameObject StaminaController;
     public Stamina staminaScript;
 
@@ -18,14 +18,14 @@ public class Combat : MonoBehaviour
     public GameObject Stunned_Player_1;
     public Text stunnedUIText;
 
-    
+
     public Text combat_status_text_ui;
 
     public Transform attackPointTop, attackPointBottom;
     public float attackRange = 0.5f;
 
     public LayerMask oppositePlayer;
-    
+
 
 
     public float swordSpeed = 5f, swingSpeed = 100f;
@@ -45,8 +45,8 @@ public class Combat : MonoBehaviour
 
     void Update()
     {
-        combat_status_text_ui.text= playerStatusCombat;
-        float PlayerStamina=staminaScript.stamina;
+        combat_status_text_ui.text = playerStatusCombat;
+        float PlayerStamina = staminaScript.stamina;
         if (canAttackorDefence)
         {
             if (Input.GetMouseButton(0))
@@ -119,14 +119,14 @@ public class Combat : MonoBehaviour
     }
     private void OnDrawGizmosSelected()
     {
-        
+
     }
     void bottomAttacking()
     {
         //top attack animation
         staminaScript.staminaCost(20f);
         playerStatusCombat = "bot_attack";
-        
+
         Collider2D[] hitEnemy = Physics2D.OverlapCircleAll(attackPointBottom.position, attackRange, oppositePlayer);
         foreach (Collider2D Player_2 in hitEnemy)
         {
@@ -188,6 +188,6 @@ public class Combat : MonoBehaviour
         yield return new WaitForSeconds(10f);
     }
 
-    
+
 }
 
