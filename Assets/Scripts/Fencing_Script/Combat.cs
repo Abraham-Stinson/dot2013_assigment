@@ -68,6 +68,10 @@ public class Combat : MonoBehaviour
         }
 
     }
+    void test()
+    {
+        Debug.Log("Ömer");
+    }
 
     void topAttackWait()
     {
