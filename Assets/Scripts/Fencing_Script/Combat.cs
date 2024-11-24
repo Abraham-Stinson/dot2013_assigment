@@ -117,9 +117,7 @@ public class Combat : MonoBehaviour
             Debug.Log("Hit to player 2");
         }
     }
-    private void OnDrawGizmosSelected()
-    {
-    }
+    
     void bottomAttacking()
     {
         //top attack animation
@@ -131,6 +129,12 @@ public class Combat : MonoBehaviour
         {
             Debug.Log("Hit to player 2");
         }
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.DrawWireSphere(attackPointTop.position, attackRange);
+        Gizmos.DrawWireSphere(attackPointBottom.position, attackRange);
     }
 
     void topDefence()
