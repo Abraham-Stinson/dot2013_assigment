@@ -133,8 +133,13 @@ public class Combat : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
+        if (attackPointTop == null || attackPointBottom == null)
+        {
+            return;
+        }
         Gizmos.DrawWireSphere(attackPointTop.position, attackRange);
         Gizmos.DrawWireSphere(attackPointBottom.position, attackRange);
+        Gizmos.color = Color.yellow;
     }
 
     void topDefence()
