@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - atari
+  - Player_1
+  - Player_2
   layers:
   - Default
   - TransparentFX
@@ -13,9 +15,9 @@ TagManager:
   - Water
   - UI
   - whatGround
-  - 
-  - 
-  - 
+  - Player_1
+  - Player_2
+  - wall
   - 
   - 
   - 
