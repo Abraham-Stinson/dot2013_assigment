@@ -11,7 +11,7 @@ public class CameraMovement : MonoBehaviour
 
     float cameraXPosition;
     float distancePlayer;
-    float minSize = 2f, maxSize = 7f;
+    float minSize = 2f, maxSize = 8.75f;
     float zoomSpeed = 5f;
     float minDistance = 0f, maxDistance = 30f;
     float minYPosition = -1f, maxYPosition = 1f;
