@@ -43,7 +43,6 @@ public class Player_Movement_Combat : MonoBehaviour
     float dashTime = 0.2f;
     float doubleTabTime = 0.2f;
 
-    //about dash
     private float lastTapTimeA, lastTapTimeD;
     private bool isDash;
     private Vector2 dashDirection;
@@ -344,7 +343,7 @@ public class Player_Movement_Combat : MonoBehaviour
     {
         isHit.text = "hit: yes";
         yield return new WaitForSeconds(1f);
-        isHit.text = "hit: no";
+        isHit .text = "hit: no";
 
     }
 }
