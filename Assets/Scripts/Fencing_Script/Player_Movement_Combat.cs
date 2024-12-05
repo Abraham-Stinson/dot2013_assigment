@@ -50,8 +50,13 @@ public class Player_Movement_Combat : MonoBehaviour
 
     protected internal bool canMove = true;
 
+    public GameObject Player_2;
+    public AiController aiScript;
+
     void Start()
     {
+        aiScript = Player_2.GetComponent<AiController>();
+
         staminaUI.text = "";
         stunnedUI.text = "start and no stun";
         combatStatusUI.text = "";
@@ -160,11 +165,11 @@ public class Player_Movement_Combat : MonoBehaviour
         transform.position += new Vector3(speed * xMovement * Time.deltaTime, 0, 0);
         if (Input.GetAxis("Horizontal") >= 0.10)
         {
-            playerStatusMoving = "walkingRight";
+            playerStatusMoving = "walking_right";
         }
         else if (Input.GetAxis("Horizontal") <= -0.10)
         {
-            playerStatusMoving = "walkingLeft";
+            playerStatusMoving = "walking_left";
         }
         else
         {
@@ -183,7 +188,7 @@ public class Player_Movement_Combat : MonoBehaviour
                 if (stamina >= 15)
                 {
                     StartDash(Vector2.left);
-                    playerStatusMoving = "dashingLeft";
+                    playerStatusMoving = "dashing_left";
                     staminaCost(15f);
                 }
                 else if (stamina < 15)
@@ -203,7 +208,7 @@ public class Player_Movement_Combat : MonoBehaviour
                 if (stamina >= 15)
                 {
                     StartDash(Vector2.right);
-                    playerStatusMoving = "dashingRight";
+                    playerStatusMoving = "dashing_right";
                     staminaCost(15f);
                 }
                 else if (stamina < 15)
@@ -232,9 +237,19 @@ public class Player_Movement_Combat : MonoBehaviour
         Collider2D[] hitEnemy = Physics2D.OverlapCircleAll(attackPointTop.position, attackRange, oppositePlayer);
         foreach (Collider2D Player_2 in hitEnemy)
         {
-            Debug.Log("Hit to player 2");
-            
-            StartCoroutine(HittingWaitForASeconds());
+
+            if (aiScript.aiStatusCombat=="top_defence")
+            {
+                //defence status
+                stamina -= 5;
+                Debug.Log("AI Defended the Player_1's top attack");
+                
+            }
+            else
+            {
+                Debug.Log("Hit top attack to player 2");
+                StartCoroutine(HittingWaitForASeconds());
+            }
             
         }
     }
@@ -243,15 +258,24 @@ public class Player_Movement_Combat : MonoBehaviour
     {
         //top attack animation
         staminaCost(20f);
-        playerStatusCombat = "bot_attack";
+        playerStatusCombat = "botom_attack";
 
         Collider2D[] hitEnemy = Physics2D.OverlapCircleAll(attackPointBottom.position, attackRange, oppositePlayer);
         foreach (Collider2D Player_2 in hitEnemy)
         {
-            Debug.Log("Hit to player 2");
-            
-            StartCoroutine(HittingWaitForASeconds());
-            
+            if (aiScript.aiStatusCombat == "bottom_defence")
+            {
+                //defence status
+                stamina -= 5;
+                Debug.Log("AI Defended the Player_1's bottom attack");
+
+            }
+            else
+            {
+                Debug.Log("Hit bottom attack to player 2");
+                StartCoroutine(HittingWaitForASeconds());
+            }
+
 
         }
     }
@@ -281,12 +305,12 @@ public class Player_Movement_Combat : MonoBehaviour
     void attackIdlePosition()
     {
         //attack idle animation
-        playerStatusCombat = "attack idle";
+        playerStatusCombat = "attack_idle";
     }
     void defendIdlePosition()
     {
         //defend idle animation
-        playerStatusCombat = "defend idle";
+        playerStatusCombat = "defend_idle";
     }
     void idlePosition()
     {
@@ -344,7 +368,6 @@ public class Player_Movement_Combat : MonoBehaviour
         isHit.text = "hit: yes";
         yield return new WaitForSeconds(1f);
         isHit .text = "hit: no";
-
     }
 }
 

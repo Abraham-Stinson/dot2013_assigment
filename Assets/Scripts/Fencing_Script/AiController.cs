@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Data.Common;
 using Unity.Services.CloudSave.Models.Data.Player;
 using UnityEngine;
 using UnityEngine.UI;
@@ -28,15 +29,20 @@ public class AiController : MonoBehaviour
     private float speedAI = 3f;
     private float dashSpeedAI = 15f;
     private float dashDuration = 0.3f;
-    private float thinkTime = 1.25f;
+    private float thinkTime = 1f;
     private bool canDoSomething = true;
+    private bool isStunned = false;
 
     private float staminaAI, maxStamina = 100f;
     private float staminaRegenSpeed = 5f;
 
+    public GameObject Player_1;
+    public Player_Movement_Combat playerScript;
 
     void Start()
     {
+        playerScript = Player_1.GetComponent<Player_Movement_Combat>();
+
         staminaAI = maxStamina;
 
         aiCombatStatusUI.text = "";
@@ -49,105 +55,124 @@ public class AiController : MonoBehaviour
 
     void Update()
     {
-        
         AiUpdatingUI();
         RegenerateStamina();
+
         if (staminaAI <= 0)
         {
-            canDoSomething = false;
-            aiStun(2f);
+            if (!isStunned)
+            {
+                StartCoroutine(AiStun(2f));
+            }
+        }
+        else if (canDoSomething && !isStunned)
+        {
+            StartCoroutine(ActionAi());
         }
 
-        else if (canDoSomething)
-        {
-            StartCoroutine(ThinkAndDoingSomething());
-        }
-        
-        //Debug.Log(distancingToPlayer());
         distancePlayer.text = "distance: " + distancingToPlayer().ToString("F1");
     }
 
-    IEnumerator ThinkAndDoingSomething()
+    IEnumerator ActionAi()
     {
-        int action;
         canDoSomething = false;
 
-        if (distancingToPlayer() <= 2.5f)
-        {
-            action = Random.Range(0, 7);
-        }
-        else
-        {
-            action = Random.Range(0, 5);
-        }
         
-        switch (action)
-        {
-            case 0:
-                //waiting
-                break;
-
-            case 1:
-                StartCoroutine(AIMovement('r'));
-                break;
-
-            case 2:
-                StartCoroutine(AIMovement('l'));
-                break;
-
-            case 3:
-                if (staminaAI>=15f)
-                {
-                    staminaAI -= 15f;
-                    StartCoroutine(AiDash(Vector2.right, 'r'));
-                }
-                break;
-
-            case 4:
-                if (staminaAI >= 15f)
-                {
-                    staminaAI -= 15f;
-                    StartCoroutine(AiDash(Vector2.left, 'l'));
-                }
-                break;
-
-            case 5:
-                if (staminaAI >= 20)
-                {
-                    TopAttack();
-                }
-                break;
-
-            case 6:
-                if (staminaAI >= 20)
-                {
-                    BottomAttack();
-                }
-                break;
-        }
-
         yield return new WaitForSeconds(thinkTime);
-        aiStatusCombat = "thinking";
-        aiStatusMoving = "thinking";
+
+        if (!isStunned)
+        {
+            Debug.Log("Movement action");
+            int movemetAction = Random.Range(1, 5);
+
+            switch (movemetAction)
+            {
+                case 0:
+                    // Bekleme durumu
+                    break;
+
+                case 1:
+                    if (distancingToPlayer() <= 6f)
+                    {
+                        StartCoroutine(AIMovement('r'));
+                    }
+                    break;
+
+                case 2:
+                    StartCoroutine(AIMovement('l'));
+                    break;
+
+                case 3:
+                    if (staminaAI >= 15f && distancingToPlayer() <= 10f && !IsWallBehind() && DistanceWall() > 5f)
+                    {
+                        StartCoroutine(AiDash(Vector2.right, 'r'));
+                        staminaAI -= 15f;
+                    }
+                    break;
+
+                case 4:
+                    if (staminaAI >= 15f && distancingToPlayer() > 3f)
+                    {
+                        StartCoroutine(AiDash(Vector2.left, 'l'));
+                        staminaAI -= 15f;
+                    }
+                    else if (distancingToPlayer() <= 2f && DistanceWall() <= 2f && IsWallBehind())
+                    {
+                        StartCoroutine(AiDash(Vector2.left, 'l'));
+                        staminaAI -= 15f;
+                    }
+                    break;
+            }
+
+            if (distancingToPlayer() < aiCloseCombatRange)
+            {
+                Debug.Log("Combat action");
+                int combatAction = Random.Range(0, 4);
+
+                switch (combatAction)
+                {
+                    case 0:
+                        TopAttack();
+                        break;
+                    case 1:
+                        BottomAttack();
+                        break;
+                    case 2:
+                        StartCoroutine(TakingDefence('t'));
+                        break;
+                    case 3:
+                        StartCoroutine(TakingDefence('b'));
+                        break;
+                }
+            }
+        }
 
         canDoSomething = true;
     }
 
     IEnumerator AIMovement(char whichDirection)
     {
-        float moveDuration = Random.Range(0f, 3f);
+        float moveDuration = Random.Range(0.5f, 3f);
         float elapsedTime = 0f;
 
         while (elapsedTime < moveDuration)
         {
-            if (whichDirection == 'l'&& distancingToPlayer() > 1.25f)
+            if (whichDirection == 'l'&& distancingToPlayer() > 1.25f && staminaAI>=30)
             {
                 Vector3 direction = (player.position - transform.position).normalized;
                 transform.position += direction * speedAI * Time.deltaTime;
 
                 aiStatusMoving = "moving_left";
             }
-            else if (whichDirection == 'r' && !IsWallBehind())
+            else if(whichDirection == 'l' && distancingToPlayer() < 1.5f && IsWallBehind()&&DistanceWall()<=3f)
+            {
+                Vector3 direction = (player.position - transform.position).normalized;
+                transform.position += direction * speedAI * Time.deltaTime;
+
+                aiStatusMoving = "moving_left";
+            }
+
+            if (whichDirection == 'r' && !IsWallBehind() && distancingToPlayer()<=12f)
             {
 
                 Vector3 direction = (transform.position - player.position).normalized;
@@ -168,12 +193,12 @@ public class AiController : MonoBehaviour
 
         while (elapsedTime < dashDuration)
         {
-            if (whichDirection == 'l' && distancingToPlayer() > 2f)
+            if (whichDirection == 'l')
             {
                 transform.Translate(dashSpeedAI * direction * Time.deltaTime);
                 aiStatusMoving = "dashing_Left";
             }
-            else if (whichDirection == 'r' && !IsWallBehind() && DistanceWall() < 3f)
+            else if (whichDirection == 'r')
             {
 
                 transform.Translate(dashSpeedAI * direction * Time.deltaTime);
@@ -189,7 +214,7 @@ public class AiController : MonoBehaviour
     {
         Vector2 origin = transform.position;
         Vector2 direction = Vector2.right;
-        RaycastHit2D isWall = Physics2D.Raycast(origin, direction, 1f, LayerMask.GetMask("wall"));
+        RaycastHit2D isWall = Physics2D.Raycast(origin, direction, 2f, LayerMask.GetMask("wall"));
         
         return isWall;
     }
@@ -203,44 +228,73 @@ public class AiController : MonoBehaviour
     {
         aiStatusCombat = "top attack wait";
         StartCoroutine(waitingTakingStance());
-        if (staminaAI >= 20&& distancingToPlayer() <= aiCloseCombatRange)
+        if (staminaAI >= 20&& distancingToPlayer() <= 1.75f)
         {
             staminaAI -= 20f;
             aiStatusCombat = "top attacking";
             Collider2D[] hitPlayer = Physics2D.OverlapCircleAll(attackPointTopAI.position, attackRangeAI, oppositePlayerAI);
             foreach (Collider2D Player_1 in hitPlayer)
-            {                
-                StartCoroutine(HittingWaitForASeconds());
+            { 
+                if (playerScript.playerStatusCombat == "top_defence")
+                {
+                    Debug.Log("Player_1 Defended the AI's top attack");
+                    staminaAI -= 5;
+                }
+                else
+                {
+                    //hit status
+                    Debug.Log("Enemy bot hit from top to player!");
+                    StartCoroutine(HittingWaitForASeconds());
 
-                Debug.Log("Enemy bot hit to player!");
+                }
             }
         }
     }
 
     void BottomAttack()
     {
-        float distanceToPlayer=distancingToPlayer();
-        aiStatusCombat = "bot attack wait";
+        aiStatusCombat = "bot_attack_wait";
         StartCoroutine(waitingTakingStance());
-        if (staminaAI >= 20&&distanceToPlayer<= aiCloseCombatRange)
+        if (staminaAI >= 20 && distancingToPlayer() <= 1.75f)
         {
             staminaAI -= 20f;
-            aiStatusCombat = "bot attacking";
+            aiStatusCombat = "bot_attacking";
             Collider2D[] hitPlayer = Physics2D.OverlapCircleAll(attackPointBottomAI.position, attackRangeAI, oppositePlayerAI);
             foreach (Collider2D Player_1 in hitPlayer)
             {
-                
                 StartCoroutine(HittingWaitForASeconds());
-                
-                Debug.Log("Enemy bot hit to player!");
+                if (playerScript.playerStatusCombat == "bottom_defence")
+                {
+                    Debug.Log("Player_1 Defended the AI's bottom attack");
+                    staminaAI -= 5;
+                }
+                else
+                {
+                    //hit status
+                    Debug.Log("Enemy bot hit from bottom to player!");
+                    StartCoroutine(HittingWaitForASeconds());
+
+                }
             }
         }
     }
+
     IEnumerator waitingTakingStance()
     {
+        yield return new WaitForSeconds(Random.Range(0.25f, 0.75f));
+    }
 
-        float time = Random.Range(0.25f, 1f);
-        yield return new WaitForSeconds(time);
+    IEnumerator TakingDefence(char direction)
+    {
+        if(direction == 't')
+        {
+            aiStatusCombat = "top_defence";
+        }
+        else if(direction == 'b')
+        {
+            aiStatusCombat = "bottom_defence";
+        }
+        yield return new WaitForSeconds(Random.Range(0.5f, 1.5f));
     }
     void RegenerateStamina()
     {
@@ -259,32 +313,46 @@ public class AiController : MonoBehaviour
         Gizmos.DrawWireSphere(attackPointBottomAI.position, attackRangeAI);
     }
 
-    public void aiStun(float duration)
+    public IEnumerator AiStun(float stunDuration)
     {
-        StartCoroutine(AiStunCoroutine(duration));
-    }
-    private IEnumerator AiStunCoroutine(float stunDuration)
-    {
-        canDoSomething = false;
         //stun animation
+        isStunned = true;
+        canDoSomething = false;
 
-        aiStaminaUI.text = "stunned";
         aiCombatStatusUI.text = "stunned";
         aiMovementStatusUI.text = "stunned";
+        aiStunnedUI.text = "stunned";
         yield return new WaitForSeconds(stunDuration);
-        aiStunnedUI.text = "no stunned";
+
+        isStunned = false;
         canDoSomething = true;
     }
 
     public void AiUpdatingUI()
     {
+
         aiStaminaUI.text = "Stamina: " + staminaAI.ToString("F0");
         aiCombatStatusUI.text = aiStatusCombat;
         aiMovementStatusUI.text = aiStatusMoving;
+
+        if (isStunned)
+        {
+            aiCombatStatusUI.text = "stunned";
+            aiMovementStatusUI.text = "stunned";
+            aiStunnedUI.text = "stunned";
+            Debug.Log("Stun");
+        }
+        else
+        {
+            aiStunnedUI.text = "no stunned";
+            aiStatusCombat = "thinking";
+            aiStatusMoving = "thinking";
+        }
     }
 
     IEnumerator HittingWaitForASeconds()
     {
+
         aiIsHit.text = "hit: yes";
         yield return new WaitForSeconds(1f);
         aiIsHit.text = "hit: no";
