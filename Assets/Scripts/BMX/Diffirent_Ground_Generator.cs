@@ -9,9 +9,9 @@ public class Diffirent_Ground_Generator : MonoBehaviour
 {
     [SerializeField] private SpriteShapeController spriteShapeController;
 
-    [SerializeField, Range(3f, 100f)] private int levelLenght = 50;
+    [SerializeField, Range(3f, 200f)] private int levelLenght = 50;
     [SerializeField, Range(1f, 50f)] private float xMulti = 2f;
-    [SerializeField, Range(1f, 50f)] private float yMulti = 2f;
+    [SerializeField, Range(0.1f, 10f)] private float yMulti = 2f;
     [SerializeField, Range(0f, 1f)] private float smoothCurve = 0.5f;
     [SerializeField] private float noiseStep = 0.5f;
     [SerializeField] private float bottom = 10f;
