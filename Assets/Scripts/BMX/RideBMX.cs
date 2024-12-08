@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
@@ -12,7 +12,8 @@ public class RideBMX : MonoBehaviour
     [SerializeField] private Rigidbody2D frontTireRB;
     [SerializeField] private Rigidbody2D backTireRB;
     [SerializeField] private Rigidbody2D bmxRB;
-
+    [SerializeField] private LayerMask groundLayer;
+    [SerializeField] private float rayDistance=0.1f;
 
     [SerializeField] private float bmxSpeed = 150f;
     [SerializeField, Range(0f, 500)] private float rotationSpeed = 100f;
@@ -28,10 +29,13 @@ public class RideBMX : MonoBehaviour
     [SerializeField] private TextMeshProUGUI distanceText;
     private float stamina;
     private Vector2 startPosition;
+
+
     void Start()
     {
         stamina = maxStamina;
         UpdatingUI();
+
 
         if (instance == null)
         {
@@ -44,8 +48,11 @@ public class RideBMX : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
+        
         moveInputX = Input.GetAxisRaw("Horizontal");
         moveInputY = Input.GetAxisRaw("Vertical");
+
+
 
         Vector2 distance = (Vector2)bmxRB.position - startPosition;
         distance.y = 0f;
@@ -61,33 +68,54 @@ public class RideBMX : MonoBehaviour
 
     private void FixedUpdate()
     {
+        //tire is on ground 
+        bool isFrontTireOnGround = Physics2D.Raycast(frontTireRB.position, Vector2.down, rayDistance, groundLayer);
+        bool isBackTireOnGround = Physics2D.Raycast(backTireRB.position, Vector2.down, rayDistance, groundLayer);
+
+        //movement
         //frontTireRB.AddTorque(-moveInput * bmxSpeed * Time.fixedDeltaTime);
         backTireRB.AddTorque(-moveInputX * bmxSpeed * Time.fixedDeltaTime);
         bmxRB.AddTorque(moveInputX * bmxSpeed * Time.fixedDeltaTime);
 
-        if (moveInputY > 0)
+
+        if (!isFrontTireOnGround && !isBackTireOnGround)
         {
-            bmxRB.transform.Rotate(Vector3.forward * -rotationSpeed * Time.deltaTime);
+            if (moveInputY > 0)
+            {
+                bmxRB.transform.Rotate(Vector3.forward * -rotationSpeed * Time.deltaTime);
 
+            }
+            else if (moveInputY < 0)
+            {
+                bmxRB.transform.Rotate(Vector3.forward * rotationSpeed * Time.deltaTime);
+
+            }
         }
-        else if (moveInputY < 0)
-        {
-            bmxRB.transform.Rotate(Vector3.forward * rotationSpeed * Time.deltaTime);
 
-        }
-
-        stamina -= Time.deltaTime * Mathf.Abs(moveInputX);
+        stamina -= Time.deltaTime * Mathf.Abs(moveInputX)*5;
         UpdatingUI();
     }
 
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawLine(frontTireRB.position, frontTireRB.position + Vector2.down * rayDistance);
+
+
+        Gizmos.color = Color.blue;
+        Gizmos.DrawLine(backTireRB.position, backTireRB.position + Vector2.down * rayDistance);
+    }
     private void UpdatingUI()
     {
         staminaMeter.fillAmount = (stamina / maxStamina);
         staminaMeter.color = gradientForStaminaMeter.Evaluate(staminaMeter.fillAmount);
     }
+
     public void RefullStamina()
     {
         stamina = maxStamina;
         UpdatingUI();
     }
+
+
 }
