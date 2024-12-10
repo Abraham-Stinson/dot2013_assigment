@@ -11,7 +11,7 @@ public class CameraMovement : MonoBehaviour
 
     float cameraXPosition;
     float distancePlayer;
-    float minSize = 2f, maxSize = 6.75f;
+    float minSize = 2f, maxSize = 8.75f;
     float zoomSpeed = 5f;
     float minDistance = 0f, maxDistance = 30f;
     float minYPosition = -1f, maxYPosition = 1f;
@@ -22,7 +22,7 @@ public class CameraMovement : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void LateUpdate()
     {
         distancePlayer = Vector3.Distance(firstPlayer.position, secondPlayer.position);
         float distanceRatio = Mathf.InverseLerp(minDistance, maxDistance, distancePlayer);

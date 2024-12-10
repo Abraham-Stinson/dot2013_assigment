@@ -5,18 +5,21 @@ TagManager:
   serializedVersion: 2
   tags:
   - atari
+  - Player_1
+  - Player_2
+  - Ground
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Ground
   - Water
   - UI
   - whatGround
-  - 
-  - 
-  - 
-  - 
+  - Player_1
+  - Player_2
+  - wall
+  - Player
   - 
   - 
   - 
