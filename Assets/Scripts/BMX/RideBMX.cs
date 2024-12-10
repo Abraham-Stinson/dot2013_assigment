@@ -9,18 +9,18 @@ using UnityEngine.UI;
 
 public class RideBMX : MonoBehaviour
 {
-    public static RideBMX instance;
+    public static RideBMX rideBMXScript;
     public float timer = 0f;
 
     [SerializeField] private Rigidbody2D frontTireRB;
     [SerializeField] private Rigidbody2D backTireRB;
-    [SerializeField] private Rigidbody2D bmxRB;
+    [SerializeField] public Rigidbody2D bmxRB;
     [SerializeField] private LayerMask groundLayer;
-    [SerializeField] private float rayDistance=0.1f;
+    [SerializeField] private float rayDistance = 0.1f;
 
     [SerializeField] private float bmxSpeed = 200f;
     [SerializeField, Range(0f, 500)] private float rotationSpeed = 100f;
-    private float moveInputX, moveInputY;
+    [SerializeField] public float moveInputX, moveInputY;
 
     //stamina
     [SerializeField] private Image staminaMeter;
@@ -35,6 +35,7 @@ public class RideBMX : MonoBehaviour
     //is ground
     public bool isGround = false;
     public Vector3 upsidedPositions;
+    public bool canInput=true;
 
 
     void Start()
@@ -43,9 +44,9 @@ public class RideBMX : MonoBehaviour
         UpdatingUI();
 
 
-        if (instance == null)
+        if (rideBMXScript == null)
         {
-            instance = this;    
+            rideBMXScript = this;    
         }
 
         startPosition = bmxRB.position;
@@ -55,8 +56,11 @@ public class RideBMX : MonoBehaviour
     {
         if (stamina > 0)
         {
-            moveInputX = Input.GetAxisRaw("Horizontal");
-            moveInputY = Input.GetAxisRaw("Vertical");
+            if (canInput) {
+                moveInputX = Input.GetAxisRaw("Horizontal");
+                moveInputY = Input.GetAxisRaw("Vertical");
+            }
+            
 
 
 
@@ -85,8 +89,12 @@ public class RideBMX : MonoBehaviour
                     stamina -= 10;
                     isGround = false;
                     bmxSpeed = 200f;
-                    ResumeGame();
+                    bmxRB.constraints = RigidbodyConstraints2D.None;
+                    canInput = true;
                     Debug.Log("BMX düzeldi ve 10 stamina azaldı");
+                    IsRiderUpsideDown.isRiderUpsideDownScript.isWorkTimer = false;
+                    IsRiderUpsideDown.isRiderUpsideDownScript.timer = 0f;
+                    ResumeGame();
                 }
             }
         }
@@ -139,6 +147,7 @@ public class RideBMX : MonoBehaviour
 
     public void RefullStamina()
     {
+        
         stamina = maxStamina;
         UpdatingUI();
     }
@@ -147,13 +156,13 @@ public class RideBMX : MonoBehaviour
     {
         bmxSpeed = 0;
         isGround = true;
-        timer += Time.deltaTime;
-        if (timer >= 0.5f)
-        {
+        //timer += Time.deltaTime;
 
+        //if (timer >= 0.5f)
+        //{
             PauseGame();
-            timer = 0f;
-        }
+            //timer = 0f;
+        //}
     }
 
     private void PauseGame()
