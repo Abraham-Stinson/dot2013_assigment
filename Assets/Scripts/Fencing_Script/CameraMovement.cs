@@ -6,22 +6,21 @@ using UnityEngine;
 
 public class CameraMovement : MonoBehaviour
 {
-    public Transform firstPlayer, secondPlayer;
-    float firstPlayerXPosition, secondPlayerXPosition;
+    [SerializeField] private Transform firstPlayer, secondPlayer;
+    [SerializeField] private float firstPlayerXPosition, secondPlayerXPosition;
 
-    float cameraXPosition;
-    float distancePlayer;
-    float minSize = 2f, maxSize = 8.75f;
-    float zoomSpeed = 5f;
-    float minDistance = 0f, maxDistance = 30f;
-    float minYPosition = -1f, maxYPosition = 1f;
+    [SerializeField] private float cameraXPosition;
+    [SerializeField] private float distancePlayer;
+    [SerializeField] private float minSize = 2f, maxSize = 8.75f;
+    [SerializeField] private float zoomSpeed = 5f;
+    [SerializeField] private float minDistance = 0f, maxDistance = 30f;
+    [SerializeField] private float minYPosition = -1f, maxYPosition = 1f;
     Camera cam;
     void Start()
     {
         cam = GetComponent<Camera>();
     }
 
-    // Update is called once per frame
     void LateUpdate()
     {
         distancePlayer = Vector3.Distance(firstPlayer.position, secondPlayer.position);
