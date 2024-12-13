@@ -9,54 +9,54 @@ using UnityEngine.UI;
 
 public class Player_Movement_Combat : MonoBehaviour
 {
-    bool canAttackorDefence = true;
+    [SerializeField] private Rigidbody2D playerRB;
 
     //playerstatus
     public string playerStatusCombat;
-    public string playerStatusMoving;
+    [SerializeField] private string playerStatusMoving;
 
     //UI
-    public Text stunnedUI;
-    public Text combatStatusUI;
-    public Text staminaUI;
-    public Text movementStatusUI;
-    public Text isHit;
+    [SerializeField] private Text stunnedUI;
+    [SerializeField] private Text combatStatusUI;
+    [SerializeField] private Text staminaUI;
+    [SerializeField] private Text movementStatusUI;
+    [SerializeField] private Text isHit;
 
 
     //opposite player layer
-    public LayerMask oppositePlayer;
+    [SerializeField] private LayerMask oppositePlayer;
 
     //combat
-    public float attackRange = 0.5f;
-    public Transform attackPointTop, attackPointBottom;
+    [SerializeField] private float attackRange = 0.5f;
+    [SerializeField] private Transform attackPointTop, attackPointBottom;
 
     //stamina
-    protected internal float 
-        stamina, 
-        maxStamina = 100f, 
-        minStamina = 0f;
-    private float staminaRegenSpeed = 10f;
+    [SerializeField] private float stamina, maxStamina = 100f;
+    [SerializeField] private float staminaRegenSpeed = 10f;
 
-    //movement statistics
-    float speed = 5f;
-    float dashSpeed = 20f;
-    float dashTime = 0.2f;
-    float doubleTabTime = 0.2f;
-
+    //movement 
+    private bool canAttackorDefence = true;
+    [SerializeField] private float speed = 5f;
+    [SerializeField] private float dashSpeed = 20f;
+    [SerializeField] private float dashTime = 0.2f;
+    [SerializeField] private float doubleTabTime = 0.2f;
     private float lastTapTimeA, lastTapTimeD;
     private bool isDash;
     private Vector2 dashDirection;
     private float dashTimer;
+    [SerializeField] private bool canMove = true;
 
-    protected internal bool canMove = true;
+    public static Player_Movement_Combat playerScript;
 
-    public GameObject Player_2;
-    public AiController aiScript;
+
 
     void Start()
     {
-        aiScript = Player_2.GetComponent<AiController>();
-
+        if (playerScript == null)
+        {
+            playerScript=this;
+        }
+        
         staminaUI.text = "";
         stunnedUI.text = "start and no stun";
         combatStatusUI.text = "";
@@ -228,7 +228,7 @@ public class Player_Movement_Combat : MonoBehaviour
     }
 
     //attack
-    void topAttacking()
+    public void topAttacking()
     {
         //top attack animation
         staminaCost(20f);
@@ -238,7 +238,7 @@ public class Player_Movement_Combat : MonoBehaviour
         foreach (Collider2D Player_2 in hitEnemy)
         {
 
-            if (aiScript.aiStatusCombat=="top_defence")
+            if (AiController.aiScript.aiStatusCombat=="top_defence")
             {
                 //defence status
                 stamina -= 5;
@@ -254,7 +254,7 @@ public class Player_Movement_Combat : MonoBehaviour
         }
     }
 
-    void bottomAttacking()
+    public void bottomAttacking()
     {
         //top attack animation
         staminaCost(20f);
@@ -263,7 +263,7 @@ public class Player_Movement_Combat : MonoBehaviour
         Collider2D[] hitEnemy = Physics2D.OverlapCircleAll(attackPointBottom.position, attackRange, oppositePlayer);
         foreach (Collider2D Player_2 in hitEnemy)
         {
-            if (aiScript.aiStatusCombat == "bottom_defence")
+            if (AiController.aiScript.aiStatusCombat == "bottom_defence")
             {
                 //defence status
                 stamina -= 5;
@@ -286,8 +286,11 @@ public class Player_Movement_Combat : MonoBehaviour
         {
             return;
         }
+        Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(attackPointTop.position, attackRange);
-        Gizmos.DrawWireSphere(attackPointBottom.position, attackRange);
+        Gizmos.color = Color.blue;
+        Gizmos.DrawLine(attackPointBottom.position, playerRB.position + Vector2.right *  attackRange );
+        
     }
     //defence
     void topDefence()

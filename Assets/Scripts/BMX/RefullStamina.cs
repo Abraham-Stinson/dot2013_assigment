@@ -8,7 +8,7 @@ public class RefullStamina : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            RideBMX.instance.RefullStamina();
+            RideBMX.rideBMXScript.RefullStamina();
             Destroy(gameObject);
         }
     }

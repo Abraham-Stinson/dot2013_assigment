@@ -7,41 +7,44 @@ using UnityEngine.UI;
 
 public class AiController : MonoBehaviour
 {
+    [SerializeField] private Rigidbody2D aiRB;
     public string aiStatusCombat;
-    public string aiStatusMoving;
+    [SerializeField] private string aiStatusMoving;
 
     //UI
-    public Text aiStunnedUI;
-    public Text aiCombatStatusUI;
-    public Text aiStaminaUI;
-    public Text aiMovementStatusUI;
-    public Text aiIsHit;
-    public Text distancePlayer;
+    [SerializeField] private Text aiStunnedUI;
+    [SerializeField] private Text aiCombatStatusUI;
+    [SerializeField] private Text aiStaminaUI;
+    [SerializeField] private Text aiMovementStatusUI;
+    [SerializeField] private Text aiIsHit;
+    [SerializeField] private Text distancePlayer;
 
-    public Transform player;
-    public LayerMask oppositePlayerAI;
-    public Transform attackPointTopAI, attackPointBottomAI;
+    [SerializeField] private Transform player;
+    [SerializeField] private LayerMask oppositePlayerAI;
+    [SerializeField] private Transform attackPointTopAI, attackPointBottomAI;
 
-    public Transform rightWall;
-    public float attackRangeAI = 0.5f;
-    private float aiCloseCombatRange = 2f;
+    [SerializeField] private Transform rightWall;
+    [SerializeField] private float attackRangeAI = 0.5f;
+    [SerializeField] private float aiCloseCombatRange = 2f;
 
-    private float speedAI = 3f;
-    private float dashSpeedAI = 15f;
-    private float dashDuration = 0.3f;
-    private float thinkTime = 1f;
-    private bool canDoSomething = true;
-    private bool isStunned = false;
+    [SerializeField] private float speedAI = 3f;
+    [SerializeField] private float dashSpeedAI = 15f;
+    [SerializeField] private float dashDuration = 0.3f;
+    [SerializeField] private float thinkTime = 1f;
+    [SerializeField] private bool canDoSomething = true;
+    [SerializeField] private bool isStunned = false;
 
-    private float staminaAI, maxStamina = 100f;
-    private float staminaRegenSpeed = 5f;
+    [SerializeField] private float staminaAI, maxStamina = 100f;
+    [SerializeField] private float staminaRegenSpeed = 5f;
 
-    public GameObject Player_1;
-    public Player_Movement_Combat playerScript;
+    public static AiController aiScript;
 
     void Start()
     {
-        playerScript = Player_1.GetComponent<Player_Movement_Combat>();
+        if (aiScript == null)
+        {
+            aiScript = this;
+        }
 
         staminaAI = maxStamina;
 
@@ -235,7 +238,7 @@ public class AiController : MonoBehaviour
             Collider2D[] hitPlayer = Physics2D.OverlapCircleAll(attackPointTopAI.position, attackRangeAI, oppositePlayerAI);
             foreach (Collider2D Player_1 in hitPlayer)
             { 
-                if (playerScript.playerStatusCombat == "top_defence")
+                if (Player_Movement_Combat.playerScript.playerStatusCombat == "top_defence")
                 {
                     Debug.Log("Player_1 Defended the AI's top attack");
                     staminaAI -= 5;
@@ -263,7 +266,7 @@ public class AiController : MonoBehaviour
             foreach (Collider2D Player_1 in hitPlayer)
             {
                 StartCoroutine(HittingWaitForASeconds());
-                if (playerScript.playerStatusCombat == "bottom_defence")
+                if (Player_Movement_Combat.playerScript.playerStatusCombat == "bottom_defence")
                 {
                     Debug.Log("Player_1 Defended the AI's bottom attack");
                     staminaAI -= 5;
@@ -309,8 +312,10 @@ public class AiController : MonoBehaviour
         if (attackPointTopAI == null || attackPointBottomAI == null)
             return;
 
+        Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(attackPointTopAI.position, attackRangeAI);
-        Gizmos.DrawWireSphere(attackPointBottomAI.position, attackRangeAI);
+        Gizmos.color = Color.blue;
+        Gizmos.DrawLine(attackPointBottomAI.position, aiRB.position + Vector2.left * attackRangeAI);
     }
 
     public IEnumerator AiStun(float stunDuration)
