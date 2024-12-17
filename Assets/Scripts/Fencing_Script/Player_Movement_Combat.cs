@@ -52,8 +52,6 @@ public class Player_Movement_Combat : MonoBehaviour
 
     public static Player_Movement_Combat playerScript;
 
-
-
     void Start()
     {
         if (playerScript == null)
@@ -253,6 +251,7 @@ public class Player_Movement_Combat : MonoBehaviour
             }
             else
             {
+                Round_Manager.roundManagerScript.EndRound("player");
                 Debug.Log("Hit top attack to player 2");
                 StartCoroutine(HittingWaitForASeconds());
             }
@@ -279,6 +278,7 @@ public class Player_Movement_Combat : MonoBehaviour
             else
             {
                 Debug.Log("Hit bottom attack to player 2");
+                Round_Manager.roundManagerScript.EndRound("player");
                 StartCoroutine(HittingWaitForASeconds());
             }
 
@@ -379,6 +379,11 @@ public class Player_Movement_Combat : MonoBehaviour
         isHit.text = "hit: yes";
         yield return new WaitForSeconds(1f);
         isHit .text = "hit: no";
+    }
+
+    public void ResetStamina()
+    {
+        stamina = maxStamina;
     }
 }
 

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,8 +13,14 @@ public class Pause_Menu : MonoBehaviour
     
     [SerializeField] private GameObject countDownUI;
     [SerializeField] public TextMeshProUGUI countDownText;
+
+    public static Pause_Menu pauseMenuScript;
     void Start()
     {
+        if (pauseMenuScript == null)
+        {
+            pauseMenuScript = this;
+        }
         pauseMenu.SetActive(false);
         countDownUI.SetActive(false);
     }
@@ -24,7 +31,7 @@ public class Pause_Menu : MonoBehaviour
         {
             if (isPaused)
             {
-                StartCoroutine(ResumeGame());
+                ResumeGame();
             }
             else
             {
@@ -40,25 +47,29 @@ public class Pause_Menu : MonoBehaviour
         isPaused = true;
     }
 
-    private IEnumerator ResumeGame()
+    private void ResumeGame()
     {
         pauseMenu.SetActive(false);
+        StartCoroutine(CountDown());
+        isPaused = false;
+    }
 
+    public IEnumerator CountDown()
+    {
         countDownUI.SetActive(true);
+        Time.timeScale = 0f;
 
         int countDown = 3;
 
         while (countDown > 0)
         {
-            countDownText.text=countDown.ToString();
+            countDownText.text = countDown.ToString();
             yield return new WaitForSecondsRealtime(1f);
             countDown--;
         }
         countDownUI.SetActive(false);
         Time.timeScale = 1f;
-        isPaused = false;
     }
-
     private void GoToAtariMenu()
     {
 

@@ -247,6 +247,7 @@ public class AiController : MonoBehaviour
                 }
                 else
                 {
+                    Round_Manager.roundManagerScript.EndRound("ai");
                     //hit status
                     Debug.Log("Enemy bot hit from top to player!");
                     StartCoroutine(HittingWaitForASeconds());
@@ -275,6 +276,7 @@ public class AiController : MonoBehaviour
                 }
                 else
                 {
+                    Round_Manager.roundManagerScript.EndRound("ai");
                     //hit status
                     Debug.Log("Enemy bot hit from bottom to player!");
                     StartCoroutine(HittingWaitForASeconds());
@@ -369,5 +371,10 @@ public class AiController : MonoBehaviour
     float distancingToPlayer()
     {
         return Vector3.Distance(player.position, transform.position);
+    }
+
+    public void ResetStamina()
+    {
+        staminaAI = maxStamina;
     }
 }

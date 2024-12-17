@@ -7,6 +7,7 @@ TagManager:
   - atari
   - Player_1
   - Player_2
+  - Ground
   layers:
   - Default
   - TransparentFX
@@ -17,7 +18,7 @@ TagManager:
   - whatGround
   - Player_1
   - Player_2
-  - 
+  - wall
   - 
   - 
   - 
