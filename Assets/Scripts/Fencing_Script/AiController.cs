@@ -14,7 +14,10 @@ public class AiController : MonoBehaviour
     //UI
     [SerializeField] private Text aiStunnedUI;
     [SerializeField] private Text aiCombatStatusUI;
-    [SerializeField] private Text aiStaminaUI;
+
+    [SerializeField] private Image aiStaminaMeter;
+    [SerializeField] private Gradient aiStaminasMeterGradient;
+
     [SerializeField] private Text aiMovementStatusUI;
     [SerializeField] private Text aiIsHit;
     [SerializeField] private Text distancePlayer;
@@ -50,7 +53,6 @@ public class AiController : MonoBehaviour
 
         aiCombatStatusUI.text = "";
         aiStunnedUI.text = "start and no stun";
-        aiStaminaUI.text = "";
         aiMovementStatusUI.text = " ";
         aiIsHit.text = "is hit: no";
         distancePlayer.text="distance: ";
@@ -335,8 +337,9 @@ public class AiController : MonoBehaviour
 
     public void AiUpdatingUI()
     {
+        aiStaminaMeter.fillAmount = (staminaAI / maxStamina);
+        aiStaminaMeter.color = aiStaminasMeterGradient.Evaluate(aiStaminaMeter.fillAmount);
 
-        aiStaminaUI.text = "Stamina: " + staminaAI.ToString("F0");
         aiCombatStatusUI.text = aiStatusCombat;
         aiMovementStatusUI.text = aiStatusMoving;
 
