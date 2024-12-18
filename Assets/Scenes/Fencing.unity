@@ -1772,6 +1772,7 @@ MonoBehaviour:
   nextRoundText: {fileID: 1314563031}
   whoWon: 
   nextRoundUI: {fileID: 953800458}
+  inNextRoundUI: 0
   playerTransform: {fileID: 1596073008}
   aiTransform: {fileID: 1936304924}
 --- !u!1 &941455331
@@ -4225,7 +4226,7 @@ MonoBehaviour:
   speedAI: 5
   dashSpeedAI: 15
   dashDuration: 0.3
-  thinkTime: 1.5
+  thinkTime: 0.75
   canDoSomething: 1
   isStunned: 0
   staminaAI: 0
