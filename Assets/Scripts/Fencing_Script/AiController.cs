@@ -42,15 +42,15 @@ public class AiController : MonoBehaviour
 
     public static AiController aiScript;
 
-    void Start()
+    private void Awake()
     {
         if (aiScript == null)
         {
             aiScript = this;
         }
-
-        staminaAI = maxStamina;
-
+    }
+    void Start()
+    {
         aiCombatStatusUI.text = "";
         aiStunnedUI.text = "start and no stun";
         aiMovementStatusUI.text = " ";
@@ -61,21 +61,24 @@ public class AiController : MonoBehaviour
     void Update()
     {
         AiUpdatingUI();
-        RegenerateStamina();
-
-        if (staminaAI <= 0)
+        if (!Pause_Menu.isPaused && !Round_Manager.roundManagerScript.inNextRoundUI)
         {
-            if (!isStunned)
+            RegenerateStamina();
+
+            if (staminaAI <= 0)
             {
-                StartCoroutine(AiStun(2f));
+                if (!isStunned)
+                {
+                    StartCoroutine(AiStun(2f));
+                }
             }
-        }
-        else if (canDoSomething && !isStunned)
-        {
-            StartCoroutine(ActionAi());
-        }
+            else if (canDoSomething && !isStunned)
+            {
+                StartCoroutine(ActionAi());
+            }
 
-        distancePlayer.text = "distance: " + distancingToPlayer().ToString("F1");
+            distancePlayer.text = "distance: " + distancingToPlayer().ToString("F1");
+        }
     }
 
     IEnumerator ActionAi()

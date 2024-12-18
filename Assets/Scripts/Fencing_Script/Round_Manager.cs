@@ -12,32 +12,38 @@ public class Round_Manager : MonoBehaviour
     [SerializeField] private int playerScore = 0;
     [SerializeField] private int aiScore = 0;
 
-    public Text roundText;
-
+    [SerializeField] private Text roundText;
+    [SerializeField] private Text whoWonText;
+    [SerializeField] private Text roundCountDownText;
+    [SerializeField] private Text nextRoundText;
+    [SerializeField] private string whoWon;
     [SerializeField] public static bool isRoundActive = false;
-
-    public static Round_Manager roundManagerScript;
+    [SerializeField] private GameObject nextRoundUI;
+    [SerializeField] public bool inNextRoundUI = false;
+    
 
     [SerializeField] private Transform playerTransform;
     [SerializeField] private Transform aiTransform;
+    public static Round_Manager roundManagerScript;
 
     private Vector3 playerStartPos;
     private Vector3 aiStartPos;
 
-    void Start()
+    private void Awake()
     {
         if (roundManagerScript == null)
         {
             roundManagerScript = this;
         }
-
+    }
+    void Start()
+    {
         playerStartPos = playerTransform.position;
         aiStartPos = aiTransform.position;
-
         StartRound();
     }
 
-    private void StartRound()
+    public void StartRound()
     {
         if(playerScore < 15 && aiScore < 15)
         {
@@ -46,7 +52,17 @@ public class Round_Manager : MonoBehaviour
             roundText.text = "Round: " + currentRound;
 
             ResetPlayerStatus();
-            StartCoroutine(Pause_Menu.pauseMenuScript.CountDown());
+
+            if (currentRound == 1)
+            {
+                whoWonText.text = "Game is starting";
+                StartCoroutine(NextRoundScreen());
+            }
+            else
+            {
+                whoWonText.text = whoWon+" Won";
+                StartCoroutine(NextRoundScreen());
+            }
         }
         else
         {
@@ -69,11 +85,14 @@ public class Round_Manager : MonoBehaviour
         if (whoHit == "player")
         {
             playerScore++;
+            whoWon = "Player 1";
         }
         else if (whoHit == "ai")
         {
-             aiScore++;
+            aiScore++;
+            whoWon = "Player 2";
         }
+
 
         currentRound++;
         StartRound();
@@ -82,5 +101,25 @@ public class Round_Manager : MonoBehaviour
     private void EndGame()
     {
 
+    }
+
+    private IEnumerator NextRoundScreen()
+    {
+        nextRoundUI.SetActive(true);
+        inNextRoundUI = true;
+        nextRoundText.text = "Round: " + currentRound;
+        Time.timeScale = 0f;
+
+        int countDown = 3;
+
+        while (countDown > 0)
+        {
+            roundCountDownText.text = countDown.ToString();
+            yield return new WaitForSecondsRealtime(1f);
+            countDown--;
+        }
+        nextRoundUI.SetActive(false);
+        inNextRoundUI = false;
+        Time.timeScale = 1f;
     }
 }

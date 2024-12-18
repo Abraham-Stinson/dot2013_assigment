@@ -52,27 +52,29 @@ public class Player_Movement_Combat : MonoBehaviour
 
     public static Player_Movement_Combat playerScript;
 
-    void Start()
+    private void Awake()
     {
         if (playerScript == null)
         {
-            playerScript=this;
+            playerScript = this;
         }
+    }
+    void Start()
+    {
         
         stunnedUI.text = "start and no stun";
         combatStatusUI.text = "";
         movementStatusUI.text = " ";
         isHit.text = "hit: no";
-
-        stamina = maxStamina;
     }
 
 
     void Update()
     {
-        if (!Pause_Menu.isPaused)
+        updatingUI();
+        if (!Pause_Menu.isPaused&& !Round_Manager.roundManagerScript.inNextRoundUI)
         {
-            updatingUI();
+            
             staminaRegeneration(staminaRegenSpeed);//stamina regen
 
             //movement

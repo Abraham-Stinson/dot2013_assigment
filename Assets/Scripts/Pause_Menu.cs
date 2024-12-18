@@ -15,19 +15,23 @@ public class Pause_Menu : MonoBehaviour
     [SerializeField] public TextMeshProUGUI countDownText;
 
     public static Pause_Menu pauseMenuScript;
-    void Start()
+    private void Awake()
     {
         if (pauseMenuScript == null)
         {
             pauseMenuScript = this;
         }
+
+    }
+    void Start()
+    {
         pauseMenu.SetActive(false);
         countDownUI.SetActive(false);
     }
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape)&&!Round_Manager.roundManagerScript.inNextRoundUI)
         {
             if (isPaused)
             {
