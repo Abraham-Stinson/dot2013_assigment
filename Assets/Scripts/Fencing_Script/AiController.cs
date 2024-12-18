@@ -33,7 +33,7 @@ public class AiController : MonoBehaviour
     [SerializeField] private float speedAI = 3f;
     [SerializeField] private float dashSpeedAI = 15f;
     [SerializeField] private float dashDuration = 0.3f;
-    [SerializeField] private float thinkTime = 1f;
+    [SerializeField] private float thinkTime = 0.75f;
     [SerializeField] private bool canDoSomething = true;
     [SerializeField] private bool isStunned = false;
 
