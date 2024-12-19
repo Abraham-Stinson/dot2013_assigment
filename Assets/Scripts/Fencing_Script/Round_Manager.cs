@@ -7,23 +7,42 @@ using UnityEngine.UI;
 
 public class Round_Manager : MonoBehaviour
 {
-    [SerializeField] private int currentRound = 1;
+    [SerializeField] private bool isGoldenTouch= false;
 
     [SerializeField] private int playerScore = 0;
     [SerializeField] private int aiScore = 0;
-
-    [SerializeField] private Text roundText;
-    [SerializeField] private Text whoWonText;
-    [SerializeField] private Text roundCountDownText;
-    [SerializeField] private Text nextRoundText;
-    [SerializeField] private string whoWon;
-    [SerializeField] public static bool isRoundActive = false;
-    [SerializeField] private GameObject nextRoundUI;
-    [SerializeField] public bool inNextRoundUI = false;
+    [SerializeField] private float timer;
+    [SerializeField] private float setTime = 180f;
+    [SerializeField] private int setCounter = 0;
+    [SerializeField] private bool isSetTimerWorking = true;
     
+    //[SerializeField] private int 
+    [SerializeField] private Text setText;
+    [SerializeField] private Text whoWonText;
+    [SerializeField] private Text afterHitCountDownText;
+    [SerializeField] private Text betweenSetMessageText;
+    [SerializeField] private Text betweenSetCountDownText;
+    [SerializeField] private Text player1ScoreOnBtwSetText;
+    [SerializeField] private Text aiScoreOnBtwSetText;
+    [SerializeField] private Text timerText;
+
+    [SerializeField] private string whoWon;
+    [SerializeField] public static bool isSetActive = false;
+    [SerializeField] private GameObject afterHitUI;
+    [SerializeField] private GameObject betweenSet;
+    [SerializeField] public bool inNextRoundUI = false;
+
+    [SerializeField] private Text playerScoreText;
+    [SerializeField] private Text aiScoreText;
 
     [SerializeField] private Transform playerTransform;
     [SerializeField] private Transform aiTransform;
+
+    [SerializeField] private GameObject finishUI;
+    [SerializeField] private Text winningText;
+
+    [SerializeField] public bool isGameEnd = false;
+
     public static Round_Manager roundManagerScript;
 
     private Vector3 playerStartPos;
@@ -40,33 +59,62 @@ public class Round_Manager : MonoBehaviour
     {
         playerStartPos = playerTransform.position;
         aiStartPos = aiTransform.position;
+        setCounter = 1;
         StartRound();
+        //afterHitUI.SetActive(false);
+        betweenSet.SetActive(false);
+        finishUI.SetActive(false);
     }
 
+    private void Update()
+    {
+        UpdatingUI();
+
+        if (isSetTimerWorking)
+        {
+            UpdateTimerUI();
+            setTime -= Time.deltaTime;
+            if (setTime <= 0)
+            {
+                StartCoroutine(TimerFinished());
+            }
+
+        }
+    }
     public void StartRound()
     {
-        if(playerScore < 15 && aiScore < 15)
+        if (playerScore < 15 && aiScore < 15)
         {
             
-            isRoundActive = true;
-            roundText.text = "Round: " + currentRound;
-
+            isSetActive = true;
             ResetPlayerStatus();
 
-            if (currentRound == 1)
+            if (playerScore == 0 && aiScore == 0)
             {
                 whoWonText.text = "Game is starting";
                 StartCoroutine(NextRoundScreen());
             }
             else
             {
-                whoWonText.text = whoWon+" Won";
-                StartCoroutine(NextRoundScreen());
+                
+                if (isGoldenTouch)
+                {
+                    whoWonText.text = whoWon + " Hit";
+                    EndGame(whoWon);
+                }
+                else
+                {
+                    whoWonText.text = whoWon + " Hit";
+                    StartCoroutine(NextRoundScreen());
+                }
             }
         }
         else
         {
-            //Game Finish
+            if (playerScore == 15)
+            {
+                EndGame("Player 1");
+            }
         }
     }
 
@@ -80,7 +128,7 @@ public class Round_Manager : MonoBehaviour
     }
     public void EndRound(string whoHit)
     {
-        isRoundActive = false;
+        isSetActive = false;
 
         if (whoHit == "player")
         {
@@ -90,36 +138,129 @@ public class Round_Manager : MonoBehaviour
         else if (whoHit == "ai")
         {
             aiScore++;
-            whoWon = "Player 2";
+            whoWon = "Ai";
         }
 
-
-        currentRound++;
         StartRound();
     }
 
-    private void EndGame()
+    private void EndGame(string win)
     {
+        Time.timeScale = 0f;
+        isGameEnd = true;
+        Debug.LogError("Bitti oglumuz");
+        finishUI.SetActive(true);
+        if(win=="Player 1")
+        {
+            winningText.text = "You won, fighter.";
+        }
+        else
+        {
+            winningText.text = "Loooser";
+        }
 
+        //There will and return to atari menu for win or lose condition
     }
 
     private IEnumerator NextRoundScreen()
     {
-        nextRoundUI.SetActive(true);
+        afterHitUI.SetActive(true);
         inNextRoundUI = true;
-        nextRoundText.text = "Round: " + currentRound;
+        isSetTimerWorking = false;
         Time.timeScale = 0f;
 
         int countDown = 3;
 
         while (countDown > 0)
         {
-            roundCountDownText.text = countDown.ToString();
+            afterHitCountDownText.text = countDown.ToString();
             yield return new WaitForSecondsRealtime(1f);
             countDown--;
         }
-        nextRoundUI.SetActive(false);
+        afterHitUI.SetActive(false);
         inNextRoundUI = false;
+        isSetTimerWorking = true;
         Time.timeScale = 1f;
     }
+
+    private IEnumerator TimerFinished()
+    {
+        isSetTimerWorking = false;
+        if (setCounter <= 3)
+        {
+            switch (setCounter)
+            {
+                case 1:
+                    betweenSetMessageText.text = "First set finished.\nSecond Set Starting";
+                    break;
+
+                case 2:
+                    betweenSetMessageText.text = "Second set finished.\nThird Set Starting";
+                    break;
+                case 3:
+                    if (playerScore==aiScore)
+                    {
+                        betweenSetMessageText.text = "Third set finished.\nNow Golden Touch";
+                        isGoldenTouch=true;
+                    }
+                    else if (playerScore>aiScore)
+                    {
+                        EndGame("Player 1");
+                    }
+                    else if (playerScore<aiScore)
+                    {
+                        EndGame("Ai");
+                    }
+                    break;
+            }
+            setCounter++;
+            setTime = 180f;
+            betweenSet.SetActive(true);
+
+            player1ScoreOnBtwSetText.text = "Player Score: " + playerScore;
+            aiScoreOnBtwSetText.text = "Ai Score: " + aiScore;
+            inNextRoundUI = true;
+            Time.timeScale = 0f;
+
+            int countDown = 3;
+            while (countDown > 0)
+            {
+                betweenSetCountDownText.text = countDown.ToString();
+                yield return new WaitForSecondsRealtime(1f);
+                countDown--;
+            }
+            betweenSet.SetActive(false);
+            inNextRoundUI = false;
+            Time.timeScale = 1f;
+
+            isSetTimerWorking = true;
+            ResetPlayerStatus();
+        }
+        else
+        {
+            isGoldenTouch = true;
+        }
+    }
+
+    private void UpdateTimerUI(){
+        int minutes = Mathf.FloorToInt(setTime / 60);
+        int seconds = Mathf.FloorToInt(setTime % 60);
+
+        timerText.text=$"{minutes:00}:{seconds:00}";
+    } 
+    private void UpdatingUI()
+    {
+        if (isGoldenTouch)
+        {
+            setText.text="Golden Touch";
+        }
+        else
+        {
+            setText.text = "Set: " + setCounter;
+        }
+        playerScoreText.text = "Score: " + playerScore;
+        aiScoreText.text = "Score: " + aiScore;
+        
+    }
+
 }

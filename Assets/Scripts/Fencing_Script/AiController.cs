@@ -20,7 +20,7 @@ public class AiController : MonoBehaviour
 
     [SerializeField] private Text aiMovementStatusUI;
     [SerializeField] private Text aiIsHit;
-    [SerializeField] private Text distancePlayer;
+    //[SerializeField] private Text distancePlayer;
 
     [SerializeField] private Transform player;
     [SerializeField] private LayerMask oppositePlayerAI;
@@ -55,13 +55,13 @@ public class AiController : MonoBehaviour
         aiStunnedUI.text = "start and no stun";
         aiMovementStatusUI.text = " ";
         aiIsHit.text = "is hit: no";
-        distancePlayer.text="distance: ";
+        //distancePlayer.text="distance: ";
     }
 
     void Update()
     {
         AiUpdatingUI();
-        if (!Pause_Menu.isPaused && !Round_Manager.roundManagerScript.inNextRoundUI)
+        if (!Pause_Menu.isPaused && !Round_Manager.roundManagerScript.inNextRoundUI&&!Round_Manager.roundManagerScript.isGameEnd)
         {
             RegenerateStamina();
 
@@ -77,7 +77,7 @@ public class AiController : MonoBehaviour
                 StartCoroutine(ActionAi());
             }
 
-            distancePlayer.text = "distance: " + distancingToPlayer().ToString("F1");
+            //distancePlayer.text = "distance: " + distancingToPlayer().ToString("F1");
         }
     }
 
