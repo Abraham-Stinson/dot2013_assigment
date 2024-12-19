@@ -14,7 +14,10 @@ public class AiController : MonoBehaviour
     //UI
     [SerializeField] private Text aiStunnedUI;
     [SerializeField] private Text aiCombatStatusUI;
-    [SerializeField] private Text aiStaminaUI;
+
+    [SerializeField] private Image aiStaminaMeter;
+    [SerializeField] private Gradient aiStaminasMeterGradient;
+
     [SerializeField] private Text aiMovementStatusUI;
     [SerializeField] private Text aiIsHit;
     [SerializeField] private Text distancePlayer;
@@ -30,7 +33,7 @@ public class AiController : MonoBehaviour
     [SerializeField] private float speedAI = 3f;
     [SerializeField] private float dashSpeedAI = 15f;
     [SerializeField] private float dashDuration = 0.3f;
-    [SerializeField] private float thinkTime = 1f;
+    [SerializeField] private float thinkTime = 0.75f;
     [SerializeField] private bool canDoSomething = true;
     [SerializeField] private bool isStunned = false;
 
@@ -39,18 +42,17 @@ public class AiController : MonoBehaviour
 
     public static AiController aiScript;
 
-    void Start()
+    private void Awake()
     {
         if (aiScript == null)
         {
             aiScript = this;
         }
-
-        staminaAI = maxStamina;
-
+    }
+    void Start()
+    {
         aiCombatStatusUI.text = "";
         aiStunnedUI.text = "start and no stun";
-        aiStaminaUI.text = "";
         aiMovementStatusUI.text = " ";
         aiIsHit.text = "is hit: no";
         distancePlayer.text="distance: ";
@@ -59,21 +61,24 @@ public class AiController : MonoBehaviour
     void Update()
     {
         AiUpdatingUI();
-        RegenerateStamina();
-
-        if (staminaAI <= 0)
+        if (!Pause_Menu.isPaused && !Round_Manager.roundManagerScript.inNextRoundUI)
         {
-            if (!isStunned)
+            RegenerateStamina();
+
+            if (staminaAI <= 0)
             {
-                StartCoroutine(AiStun(2f));
+                if (!isStunned)
+                {
+                    StartCoroutine(AiStun(2f));
+                }
             }
-        }
-        else if (canDoSomething && !isStunned)
-        {
-            StartCoroutine(ActionAi());
-        }
+            else if (canDoSomething && !isStunned)
+            {
+                StartCoroutine(ActionAi());
+            }
 
-        distancePlayer.text = "distance: " + distancingToPlayer().ToString("F1");
+            distancePlayer.text = "distance: " + distancingToPlayer().ToString("F1");
+        }
     }
 
     IEnumerator ActionAi()
@@ -245,6 +250,7 @@ public class AiController : MonoBehaviour
                 }
                 else
                 {
+                    Round_Manager.roundManagerScript.EndRound("ai");
                     //hit status
                     Debug.Log("Enemy bot hit from top to player!");
                     StartCoroutine(HittingWaitForASeconds());
@@ -273,6 +279,7 @@ public class AiController : MonoBehaviour
                 }
                 else
                 {
+                    Round_Manager.roundManagerScript.EndRound("ai");
                     //hit status
                     Debug.Log("Enemy bot hit from bottom to player!");
                     StartCoroutine(HittingWaitForASeconds());
@@ -335,8 +342,9 @@ public class AiController : MonoBehaviour
 
     public void AiUpdatingUI()
     {
+        aiStaminaMeter.fillAmount = (staminaAI / maxStamina);
+        aiStaminaMeter.color = aiStaminasMeterGradient.Evaluate(aiStaminaMeter.fillAmount);
 
-        aiStaminaUI.text = "Stamina: " + staminaAI.ToString("F0");
         aiCombatStatusUI.text = aiStatusCombat;
         aiMovementStatusUI.text = aiStatusMoving;
 
@@ -366,5 +374,10 @@ public class AiController : MonoBehaviour
     float distancingToPlayer()
     {
         return Vector3.Distance(player.position, transform.position);
+    }
+
+    public void ResetStamina()
+    {
+        staminaAI = maxStamina;
     }
 }

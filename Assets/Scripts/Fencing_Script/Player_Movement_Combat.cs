@@ -18,7 +18,11 @@ public class Player_Movement_Combat : MonoBehaviour
     //UI
     [SerializeField] private Text stunnedUI;
     [SerializeField] private Text combatStatusUI;
-    [SerializeField] private Text staminaUI;
+
+    [SerializeField] private Image staminaMeter;
+    [SerializeField] private Gradient staminaGradient;
+
+
     [SerializeField] private Text movementStatusUI;
     [SerializeField] private Text isHit;
 
@@ -48,114 +52,116 @@ public class Player_Movement_Combat : MonoBehaviour
 
     public static Player_Movement_Combat playerScript;
 
-
-
-    void Start()
+    private void Awake()
     {
         if (playerScript == null)
         {
-            playerScript=this;
+            playerScript = this;
         }
+    }
+    void Start()
+    {
         
-        staminaUI.text = "";
         stunnedUI.text = "start and no stun";
         combatStatusUI.text = "";
         movementStatusUI.text = " ";
         isHit.text = "hit: no";
-
-        stamina = maxStamina;
     }
 
 
     void Update()
     {
         updatingUI();
-        staminaRegeneration(staminaRegenSpeed);//stamina regen
-
-        //movement
-
-        if (canMove)
+        if (!Pause_Menu.isPaused&& !Round_Manager.roundManagerScript.inNextRoundUI)
         {
-            if (isDash)
+            
+            staminaRegeneration(staminaRegenSpeed);//stamina regen
+
+            //movement
+
+            if (canMove)
             {
-
-                transform.Translate(dashSpeed * dashDirection * Time.deltaTime);
-
-                dashTimer -= Time.deltaTime;
-                if (dashTimer < 0)
+                if (isDash)
                 {
-                    isDash = false;
-                }
-            }
-            else
-            {
-                walking();
-                dashInput(stamina);
-            }
-            //Debug.Log(playerStatus);
-        }
 
-        if (stamina == 0f)
-        {
-            stunned(1f);
-        }
+                    transform.Translate(dashSpeed * dashDirection * Time.deltaTime);
 
-        if (canAttackorDefence)
-        {
-            if (Input.GetMouseButton(0))
-            {
-                if (Input.GetKeyDown(KeyCode.W))
-                {
-                    if (stamina >= 20)
+                    dashTimer -= Time.deltaTime;
+                    if (dashTimer < 0)
                     {
-                        topAttacking();
-
-                    }
-                    else
-                    {
-                        stunned(3f);
-                    }
-                }
-                else if (Input.GetKeyDown(KeyCode.S))
-                {
-                    if (stamina >= 20)
-                    {
-                        bottomAttacking();
-
-                    }
-                    else
-                    {
-                        stunned(3f);
+                        isDash = false;
                     }
                 }
                 else
                 {
-                    attackIdlePosition();
+                    walking();
+                    dashInput(stamina);
                 }
+                //Debug.Log(playerStatus);
             }
 
-            else if (Input.GetMouseButton(1))
+            if (stamina == 0f)
             {
-                if (Input.GetKey(KeyCode.W))
+                stunned(1f);
+            }
+
+            if (canAttackorDefence)
+            {
+                if (Input.GetMouseButton(0))
                 {
-                    topDefence();
+                    if (Input.GetKeyDown(KeyCode.W))
+                    {
+                        if (stamina >= 20)
+                        {
+                            topAttacking();
+
+                        }
+                        else
+                        {
+                            stunned(3f);
+                        }
+                    }
+                    else if (Input.GetKeyDown(KeyCode.S))
+                    {
+                        if (stamina >= 20)
+                        {
+                            bottomAttacking();
+
+                        }
+                        else
+                        {
+                            stunned(3f);
+                        }
+                    }
+                    else
+                    {
+                        attackIdlePosition();
+                    }
                 }
-                else if (Input.GetKey(KeyCode.S))
+
+                else if (Input.GetMouseButton(1))
                 {
-                    bottomDefence();
+                    if (Input.GetKey(KeyCode.W))
+                    {
+                        topDefence();
+                    }
+                    else if (Input.GetKey(KeyCode.S))
+                    {
+                        bottomDefence();
+                    }
+                    else
+                    {
+                        defendIdlePosition();
+                    }
                 }
+
                 else
                 {
-                    defendIdlePosition();
+                    idlePosition();
                 }
             }
 
-            else
-            {
-                idlePosition();
-            }
         }
-
     }
     //movement
     void walking()
@@ -247,6 +253,7 @@ public class Player_Movement_Combat : MonoBehaviour
             }
             else
             {
+                Round_Manager.roundManagerScript.EndRound("player");
                 Debug.Log("Hit top attack to player 2");
                 StartCoroutine(HittingWaitForASeconds());
             }
@@ -273,6 +280,7 @@ public class Player_Movement_Combat : MonoBehaviour
             else
             {
                 Debug.Log("Hit bottom attack to player 2");
+                Round_Manager.roundManagerScript.EndRound("player");
                 StartCoroutine(HittingWaitForASeconds());
             }
 
@@ -343,7 +351,9 @@ public class Player_Movement_Combat : MonoBehaviour
     //refreshing UI
     public void updatingUI()
     {
-        staminaUI.text = "Stamina: " + stamina.ToString("F0");
+        staminaMeter.fillAmount = (stamina / maxStamina);
+        staminaMeter.color = staminaGradient.Evaluate(staminaMeter.fillAmount);
+
         combatStatusUI.text = playerStatusCombat;
         movementStatusUI.text = playerStatusMoving;
     }
@@ -371,6 +381,11 @@ public class Player_Movement_Combat : MonoBehaviour
         isHit.text = "hit: yes";
         yield return new WaitForSeconds(1f);
         isHit .text = "hit: no";
+    }
+
+    public void ResetStamina()
+    {
+        stamina = maxStamina;
     }
 }
 
