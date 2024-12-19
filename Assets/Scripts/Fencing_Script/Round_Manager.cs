@@ -9,8 +9,8 @@ public class Round_Manager : MonoBehaviour
 {
     [SerializeField] private bool isGoldenTouch= false;
 
-    [SerializeField] private int playerScore = 0;
-    [SerializeField] private int aiScore = 0;
+    [SerializeField] public int playerScore = 0;
+    [SerializeField] public int aiScore = 0;
     [SerializeField] private float timer;
     [SerializeField] private float setTime = 180f;
     [SerializeField] private int setCounter = 0;
@@ -114,6 +114,10 @@ public class Round_Manager : MonoBehaviour
             if (playerScore == 15)
             {
                 EndGame("Player 1");
+            }
+            else
+            {
+                EndGame("Ai");
             }
         }
     }
