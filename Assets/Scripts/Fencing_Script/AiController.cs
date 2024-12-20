@@ -20,7 +20,7 @@ public class AiController : MonoBehaviour
 
     [SerializeField] private Text aiMovementStatusUI;
     [SerializeField] private Text aiIsHit;
-    [SerializeField] private Text distancePlayer;
+    //[SerializeField] private Text distancePlayer;
 
     [SerializeField] private Transform player;
     [SerializeField] private LayerMask oppositePlayerAI;
@@ -33,7 +33,7 @@ public class AiController : MonoBehaviour
     [SerializeField] private float speedAI = 3f;
     [SerializeField] private float dashSpeedAI = 15f;
     [SerializeField] private float dashDuration = 0.3f;
-    [SerializeField] private float thinkTime = 0.75f;
+    [SerializeField] private float thinkTime = 1f;
     [SerializeField] private bool canDoSomething = true;
     [SerializeField] private bool isStunned = false;
 
@@ -55,13 +55,14 @@ public class AiController : MonoBehaviour
         aiStunnedUI.text = "start and no stun";
         aiMovementStatusUI.text = " ";
         aiIsHit.text = "is hit: no";
-        distancePlayer.text="distance: ";
+        //distancePlayer.text="distance: ";
     }
 
     void Update()
     {
+        DifficultOfAI();
         AiUpdatingUI();
-        if (!Pause_Menu.isPaused && !Round_Manager.roundManagerScript.inNextRoundUI)
+        if (!Pause_Menu.isPaused && !Round_Manager.roundManagerScript.inNextRoundUI&&!Round_Manager.roundManagerScript.isGameEnd)
         {
             RegenerateStamina();
 
@@ -77,7 +78,7 @@ public class AiController : MonoBehaviour
                 StartCoroutine(ActionAi());
             }
 
-            distancePlayer.text = "distance: " + distancingToPlayer().ToString("F1");
+            //distancePlayer.text = "distance: " + distancingToPlayer().ToString("F1");
         }
     }
 
@@ -380,4 +381,24 @@ public class AiController : MonoBehaviour
     {
         staminaAI = maxStamina;
     }
+
+    public void DifficultOfAI()
+    {
+        int scoreDifference = Round_Manager.roundManagerScript.aiScore - Round_Manager.roundManagerScript.playerScore;
+
+        if (scoreDifference > 0) 
+        {
+            thinkTime = 1.0f + (scoreDifference * 0.1f);
+        }
+        else if (scoreDifference < 0)
+        {
+            thinkTime = Mathf.Max(0.1f, 1.0f - Mathf.Abs(scoreDifference) * 0.1f);
+        }
+        else 
+        { 
+            thinkTime = 1.0f;
+        }
+        Debug.Log(thinkTime);
+    }
+    
 }

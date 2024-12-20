@@ -14,7 +14,7 @@ public class CameraMovement : MonoBehaviour
     [SerializeField] private float minSize = 2f, maxSize = 8.75f;
     [SerializeField] private float zoomSpeed = 5f;
     [SerializeField] private float minDistance = 0f, maxDistance = 30f;
-    [SerializeField] private float minYPosition = -1f, maxYPosition = 1f;
+    [SerializeField] private float minYPosition = -2f, maxYPosition = 2f;
     Camera cam;
     void Start()
     {

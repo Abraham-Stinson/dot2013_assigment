@@ -72,7 +72,7 @@ public class Player_Movement_Combat : MonoBehaviour
     void Update()
     {
         updatingUI();
-        if (!Pause_Menu.isPaused&& !Round_Manager.roundManagerScript.inNextRoundUI)
+        if (!Pause_Menu.isPaused&& !Round_Manager.roundManagerScript.inNextRoundUI && !Round_Manager.roundManagerScript.isGameEnd)
         {
             
             staminaRegeneration(staminaRegenSpeed);//stamina regen

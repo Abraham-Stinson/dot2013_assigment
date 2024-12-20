@@ -13,6 +13,7 @@ public class Pause_Menu : MonoBehaviour
     
     [SerializeField] private GameObject countDownUI;
     [SerializeField] public TextMeshProUGUI countDownText;
+    
 
     public static Pause_Menu pauseMenuScript;
     private void Awake()
@@ -51,7 +52,7 @@ public class Pause_Menu : MonoBehaviour
         isPaused = true;
     }
 
-    private void ResumeGame()
+    public void ResumeGame()
     {
         pauseMenu.SetActive(false);
         StartCoroutine(CountDown());
@@ -74,18 +75,23 @@ public class Pause_Menu : MonoBehaviour
         countDownUI.SetActive(false);
         Time.timeScale = 1f;
     }
-    private void GoToAtariMenu()
+    public void GoToSettings()
+    {
+
+        //scene to settings
+    }
+    public void GoToAtariMenu()
     {
 
         //scene to atari menu
         Time.timeScale = 1f;
     }
-    private void GoToMainMenu()
+    public void GoToMainMenu()
     {
 
         //scene to main menu
     }
-    private void QuitGame()
+    public void QuitGame()
     {
         Application.Quit();
     }
