@@ -31,7 +31,8 @@ public class Player_Movement_Combat : MonoBehaviour
     [SerializeField] private LayerMask oppositePlayer;
 
     //combat
-    [SerializeField] private float attackRange = 0.5f;
+    [SerializeField] private float attackRangeTop = 0.5f;
+    [SerializeField] private float attackRangeBottom = 0.5f;
     [SerializeField] private Transform attackPointTop, attackPointBottom;
 
     //stamina
@@ -52,6 +53,12 @@ public class Player_Movement_Combat : MonoBehaviour
 
     public static Player_Movement_Combat playerScript;
 
+    //Animation 
+    private Animator animator;
+    private Animation animation;
+        //dash
+    
+
     private void Awake()
     {
         if (playerScript == null)
@@ -61,7 +68,7 @@ public class Player_Movement_Combat : MonoBehaviour
     }
     void Start()
     {
-        
+        animator=GetComponent<Animator>();   
         stunnedUI.text = "start and no stun";
         combatStatusUI.text = "";
         movementStatusUI.text = " ";
@@ -172,14 +179,17 @@ public class Player_Movement_Combat : MonoBehaviour
         if (Input.GetAxis("Horizontal") >= 0.10)
         {
             playerStatusMoving = "walking_right";
+            animator.SetInteger("walkingCondition", 1);
         }
         else if (Input.GetAxis("Horizontal") <= -0.10)
         {
             playerStatusMoving = "walking_left";
+            animator.SetInteger("walkingCondition", -1);
         }
         else
         {
             playerStatusMoving = "idle";
+            animator.SetInteger("walkingCondition", 0);
         }
 
     }
@@ -240,7 +250,7 @@ public class Player_Movement_Combat : MonoBehaviour
         staminaCost(20f);
         playerStatusCombat = "top_attack";
 
-        Collider2D[] hitEnemy = Physics2D.OverlapCircleAll(attackPointTop.position, attackRange, oppositePlayer);
+        Collider2D[] hitEnemy = Physics2D.OverlapCircleAll(attackPointTop.position, attackRangeTop, oppositePlayer);
         foreach (Collider2D Player_2 in hitEnemy)
         {
 
@@ -267,7 +277,7 @@ public class Player_Movement_Combat : MonoBehaviour
         staminaCost(20f);
         playerStatusCombat = "botom_attack";
 
-        Collider2D[] hitEnemy = Physics2D.OverlapCircleAll(attackPointBottom.position, attackRange, oppositePlayer);
+        Collider2D[] hitEnemy = Physics2D.OverlapCircleAll(attackPointBottom.position, attackRangeBottom, oppositePlayer);
         foreach (Collider2D Player_2 in hitEnemy)
         {
             if (AiController.aiScript.aiStatusCombat == "bottom_defence")
@@ -295,9 +305,9 @@ public class Player_Movement_Combat : MonoBehaviour
             return;
         }
         Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(attackPointTop.position, attackRange);
+        Gizmos.DrawWireSphere(attackPointTop.position, attackRangeTop);
         Gizmos.color = Color.blue;
-        Gizmos.DrawLine(attackPointBottom.position, playerRB.position + Vector2.right *  attackRange );
+        Gizmos.DrawLine(attackPointBottom.position,new Vector2(playerRB.position.x, playerRB.position.y+1.4f) + Vector2.right *  attackRangeBottom );
         
     }
     //defence
