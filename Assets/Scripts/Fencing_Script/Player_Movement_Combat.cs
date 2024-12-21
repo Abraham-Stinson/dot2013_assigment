@@ -9,8 +9,9 @@ public class Player_Movement_Combat : MonoBehaviour
     // Player status
     public string playerStatusCombat;
     [SerializeField] private string playerStatusMoving;
+    
+        // UI
 
-    // UI
     [SerializeField] private Text stunnedUI;
     [SerializeField] private Text combatStatusUI;
     [SerializeField] private Image staminaMeter;
@@ -98,7 +99,13 @@ public class Player_Movement_Combat : MonoBehaviour
     {
         //Debug.Log(currentState);
         UpdatingUI();
-        Debug.Log("Gard alıyon muu "+ isTakingGuardOnAttack);
+        Controller();
+
+    }
+    #region CONTROLLER
+    private void Controller()
+    {
+        Debug.Log("Gard alıyon muu " + isTakingGuardOnAttack);
         if (!Pause_Menu.isPaused && !Round_Manager.roundManagerScript.inNextRoundUI && !Round_Manager.roundManagerScript.isGameEnd && canAttackOrDefend)
         {
             xMovement = Input.GetAxis("Horizontal");
@@ -117,7 +124,7 @@ public class Player_Movement_Combat : MonoBehaviour
             if (leftMouseButtonDown)
             {
                 isTakingGuardOnAttack = true;
-                
+
             }
             else
             {
@@ -194,9 +201,8 @@ public class Player_Movement_Combat : MonoBehaviour
                 isAttackingOrDefending = false;
             }
         }
-
     }
-
+    #endregion
     private void FixedUpdate()
     {
         if (!Pause_Menu.isPaused && !Round_Manager.roundManagerScript.inNextRoundUI && !Round_Manager.roundManagerScript.isGameEnd)
