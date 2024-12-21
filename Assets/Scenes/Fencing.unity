@@ -385,7 +385,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.4792453, g: 0, b: 0.32879627, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -543,7 +543,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.4792453, g: 0, b: 0.32879627, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -831,7 +831,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.4792453, g: 0, b: 0.32879627, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -3125,7 +3125,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.4792453, g: 0, b: 0.32879627, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -3549,7 +3549,7 @@ Transform:
   m_GameObject: {fileID: 1446376109}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.265, y: 0.381, z: 0}
+  m_LocalPosition: {x: 0.6, y: 0.4, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4598,7 +4598,7 @@ Transform:
   m_GameObject: {fileID: 1596073004}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -5, y: -4, z: 0}
+  m_LocalPosition: {x: -6.97, y: -4, z: 0}
   m_LocalScale: {x: 6.26, y: 6.26, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -4638,7 +4638,7 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.11, y: 0.27}
+  m_Offset: {x: 0.25, y: 0.27}
   m_Size: {x: 0.28, y: 0.41}
   m_Direction: 0
 --- !u!114 &1596073011
@@ -4694,18 +4694,21 @@ MonoBehaviour:
   oppositePlayer:
     serializedVersion: 2
     m_Bits: 256
-  attackRangeTop: 0.75
-  attackRangeBottom: 3
+  attackRangeTop: 1
+  attackRangeBottom: 2.39
   attackPointTop: {fileID: 1446376110}
   attackPointBottom: {fileID: 1921595149}
+  isAttackingOrDefending: 0
   stamina: 0
   maxStamina: 100
   staminaRegenSpeed: 10
   speed: 5
   dashSpeed: 15
   dashTime: 0.2
-  doubleTabTime: 0.2
+  doubleTapTime: 0.2
   canMove: 1
+  attackCoolDown: 1
+  nextAttackTime: 0
 --- !u!95 &1596073012
 Animator:
   serializedVersion: 5
@@ -4777,7 +4780,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.4792453, g: 0, b: 0.32879627, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -5277,7 +5280,7 @@ Transform:
   m_GameObject: {fileID: 1921595148}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.067, y: 0.213, z: 0}
+  m_LocalPosition: {x: 0.769, y: 0.223, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5454,7 +5457,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1936304920}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a833d43de53279f489fc5982005155fc, type: 3}
   m_Name: 
