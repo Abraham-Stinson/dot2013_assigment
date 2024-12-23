@@ -75,6 +75,8 @@ public class Player_Movement_Combat : MonoBehaviour
     bool isTopDefending = false;
     bool isBottomDefending = false;
 
+    [SerializeField] public bool isPlayerTakeDamage = false;
+
     [SerializeField] private float attackCoolDown = 0.5f;
     [SerializeField] float nextAttackTime = 0f;
     private void Awake()
@@ -102,6 +104,68 @@ public class Player_Movement_Combat : MonoBehaviour
         Controller();
 
     }
+   
+    private void FixedUpdate()
+    {
+        if (!Pause_Menu.isPaused && !Round_Manager.roundManagerScript.inNextRoundUI && !Round_Manager.roundManagerScript.isGameEnd)
+        {
+            if (canMove)
+            {
+                if (isDash)
+                {
+                    transform.Translate(dashSpeed * dashDirection * Time.deltaTime);
+                    dashTimer -= Time.deltaTime;
+                    if (dashTimer < 0)
+                    {
+                        isDash = false;
+                    }
+                }
+                else
+                {
+                    walking();
+                }
+            }
+
+            if (stamina == 0f)
+            {
+                Stunned(1f);
+            }
+
+            if (isTopAttacking)
+            {
+                TopAttack();
+                //Debug.Log("Yukardan Vuruyoz ya olumuz");
+                isTopAttacking = false;
+                //AttackCoolDown();
+            }
+            else if (isBottomAttacking)
+            {
+                AnimationManager(player_bottom_attack);
+                //StartCoroutine(WaitForAnimation("player_bottom_attack"));
+                BottomAttack();
+                //Debug.Log("Aşşadan Vuruyoz ya olumuz");
+                isBottomAttacking = false;
+                //AttackCoolDown();
+            }
+            else if (isTakingGuardOnAttack)
+            {
+                AttackIdle();
+                //Debug.Log("Saldırmayı bekliyoz ya olumuz");
+            }
+            else if (isTopDefending)
+            {
+                TopDefence();
+                isTopDefending = false;
+
+            }
+            else if (isBottomDefending)
+            {
+                BottomDefence();
+                isBottomDefending = false;
+            }
+        }
+    }
+
     #region CONTROLLER
     private void Controller()
     {
@@ -203,67 +267,6 @@ public class Player_Movement_Combat : MonoBehaviour
         }
     }
     #endregion
-    private void FixedUpdate()
-    {
-        if (!Pause_Menu.isPaused && !Round_Manager.roundManagerScript.inNextRoundUI && !Round_Manager.roundManagerScript.isGameEnd)
-        {
-            if (canMove)
-            {
-                if (isDash)
-                {
-                    transform.Translate(dashSpeed * dashDirection * Time.deltaTime);
-                    dashTimer -= Time.deltaTime;
-                    if (dashTimer < 0)
-                    {
-                        isDash = false;
-                    }
-                }
-                else
-                {
-                    walking();
-                }
-            }
-
-            if (stamina == 0f)
-            {
-                Stunned(1f);
-            }
-
-            if (isTopAttacking)
-            {
-                TopAttack();
-                //Debug.Log("Yukardan Vuruyoz ya olumuz");
-                isTopAttacking = false;
-                //AttackCoolDown();
-            }
-            else if (isBottomAttacking)
-            {
-                AnimationManager("player_bottom_attack");
-                //StartCoroutine(WaitForAnimation("player_bottom_attack"));
-                BottomAttack();
-                //Debug.Log("Aşşadan Vuruyoz ya olumuz");
-                isBottomAttacking = false;
-                //AttackCoolDown();
-            }
-            else if (isTakingGuardOnAttack)
-            {
-                AttackIdle();
-                //Debug.Log("Saldırmayı bekliyoz ya olumuz");
-            }
-            else if (isTopDefending)
-            {
-                TopDefence();
-                isTopDefending = false;
-
-            }
-            else if (isBottomDefending)
-            {
-                BottomDefence();
-                isBottomDefending = false;
-            }
-        }
-    }
-
     // Movement
     void walking()
     {
@@ -356,7 +359,9 @@ public class Player_Movement_Combat : MonoBehaviour
             }
             else
             {
-                Round_Manager.roundManagerScript.EndRound("player");
+                //Animation is here
+                AiController.aiScript.isAiTakeDamage = true;
+                StartCoroutine(HittingEvent());
                 Debug.Log("Hit top attack to player 2");
                 StartCoroutine(HittingWaitForASeconds());
             }
@@ -377,13 +382,20 @@ public class Player_Movement_Combat : MonoBehaviour
             }
             else
             {
-                Debug.Log("Hit bottom attack to player 2");
-                Round_Manager.roundManagerScript.EndRound("player");
+                //Animation is here
+                AiController.aiScript.isAiTakeDamage = true;
+                StartCoroutine(HittingEvent());
                 StartCoroutine(HittingWaitForASeconds());
+                Debug.Log("Hit bottom attack to player 2");
             }
         }
     }
+    private IEnumerator HittingEvent()
+    {
+        yield return new WaitForSeconds(1f);
+        Round_Manager.roundManagerScript.EndRound("player");
 
+    }
     private void OnDrawGizmosSelected()
     {
         if (attackPointTop == null || attackPointBottom == null)

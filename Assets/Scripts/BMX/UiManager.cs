@@ -21,18 +21,24 @@ public class UiManager : MonoBehaviour
     [SerializeField] private float distanceStartToFinish;
 
     [Header("UpsideDown")]
-    [SerializeField] private GameObject upsideDownUI;
+    [SerializeField] public GameObject upsideDownUI;
+    [SerializeField] public GameObject upSideDownAndStaminaOffUI;
 
     [Header("PauseMenu")]
     [SerializeField] private GameObject pauseMenu;
     [SerializeField] public static bool isPaused = false;
 
-    [SerializeField] private GameObject countDownUI;
+    [SerializeField] public GameObject countDownUI;
     [SerializeField] public TextMeshProUGUI countDownText;
 
     [Header("Stamina Off Text")]
     [SerializeField] public GameObject staminaOffGO;
     [SerializeField] public TextMeshProUGUI staminaOffText;
+
+    [Header("Win or Lose UI")]
+    [SerializeField] public GameObject winOrLoseUI;
+    [SerializeField] public TextMeshProUGUI statusWinLoseUI;
+    [SerializeField] public TextMeshProUGUI congratsOrBlameUI;
     // Start is called before the first frame update
     void Start()
     {
@@ -45,6 +51,8 @@ public class UiManager : MonoBehaviour
         pauseMenu.SetActive(false);
         countDownUI.SetActive(false);
         staminaOffGO.SetActive(false);
+        winOrLoseUI.SetActive(false);
+        upSideDownAndStaminaOffUI.SetActive(false);
 
         UpdatingStaminaMeterUI();
     }
@@ -85,6 +93,11 @@ public class UiManager : MonoBehaviour
     public void UpsideDownUI(bool isActive)
     {
         upsideDownUI.SetActive(isActive);
+    }
+
+    public void UpSideDownAndStaminaOffUI(bool isActive)
+    {
+        upSideDownAndStaminaOffUI.SetActive(isActive);
     }
     
     private void PauseMenuInput()

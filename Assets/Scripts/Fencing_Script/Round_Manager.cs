@@ -85,7 +85,8 @@ public class Round_Manager : MonoBehaviour
     {
         if (playerScore < 15 && aiScore < 15)
         {
-            
+            AiController.aiScript.isAiTakeDamage = false;
+            Player_Movement_Combat.playerScript.isPlayerTakeDamage = false;
             isSetActive = true;
             ResetPlayerStatus();
 

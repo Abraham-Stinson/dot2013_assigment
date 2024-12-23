@@ -21,7 +21,10 @@ public class Finish_Event : MonoBehaviour
             {
                 hasEnterToFinish = true;
                 Debug.Log("Player oyunu bitirdi");
-                RideBMX.rideBMXScript.EndGame(true);
+                RideBMX.rideBMXScript.canInput = false;
+                RideBMX.rideBMXScript.moveInputX = 0f;
+                RideBMX.rideBMXScript.moveInputY = 0f;
+                RideBMX.rideBMXScript.StartCoroutine(RideBMX.rideBMXScript.EndGame(true));
             }
         }
     }

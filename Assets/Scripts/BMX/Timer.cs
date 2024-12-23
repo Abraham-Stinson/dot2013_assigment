@@ -18,7 +18,6 @@ public class Timer : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (isBMXTimerWorking)
@@ -27,7 +26,8 @@ public class Timer : MonoBehaviour
             timer -= Time.deltaTime;
             if (timer <= 0)
             {
-                RideBMX.rideBMXScript.EndGame(false);
+                isBMXTimerWorking = false;
+                StartCoroutine(RideBMX.rideBMXScript.EndGame(false));
             }
 
         }

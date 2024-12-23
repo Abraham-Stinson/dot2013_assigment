@@ -41,6 +41,8 @@ public class AiController : MonoBehaviour
     [SerializeField] private float staminaAI, maxStamina = 100f;
     [SerializeField] private float staminaRegenSpeed = 5f;
 
+    [SerializeField] public bool isAiTakeDamage=false;
+
     public static AiController aiScript;
 
     private void Awake()
@@ -250,7 +252,10 @@ public class AiController : MonoBehaviour
                 }
                 else
                 {
-                    Round_Manager.roundManagerScript.EndRound("ai");
+                    //Animation is here
+
+                    Player_Movement_Combat.playerScript.isPlayerTakeDamage = true;
+                    StartCoroutine(HittingEvent());
                     //hit status
                     Debug.Log("Enemy bot hit from top to player!");
                     //StartCoroutine(HittingWaitForASeconds());
@@ -278,7 +283,11 @@ public class AiController : MonoBehaviour
                 }
                 else
                 {
-                    Round_Manager.roundManagerScript.EndRound("ai");
+                    //Animation is here
+
+                    Player_Movement_Combat.playerScript.isPlayerTakeDamage = true;
+                    StartCoroutine(HittingEvent());
+
                     //hit status
                     Debug.Log("Enemy bot hit from bottom to player!");
                     //StartCoroutine(HittingWaitForASeconds());
@@ -286,6 +295,13 @@ public class AiController : MonoBehaviour
                 }
             }
         }
+    }
+
+    private IEnumerator HittingEvent()
+    {
+        yield return new WaitForSeconds(1f);
+        Round_Manager.roundManagerScript.EndRound("ai");
+        
     }
 
     IEnumerator waitingTakingStance()

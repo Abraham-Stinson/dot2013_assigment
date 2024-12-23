@@ -117,7 +117,7 @@ public class RideBMX : MonoBehaviour
         {
             Debug.Log("aaaaaaa");
             UiManager.uiScript.staminaOffGO.SetActive(false);
-            EndGame(false);
+            StartCoroutine(EndGame(false));
         }
 
         /*bmxRB.angularVelocity = 0f;
@@ -134,14 +134,24 @@ public class RideBMX : MonoBehaviour
     {
         if (!isGround) return;
         ItsGround();
-        if (Input.GetKeyDown(KeyCode.Space)&&stamina>=10)
+        if (stamina >= 15)
         {
-            FixBike();
+            UiManager.uiScript.UpsideDownUI(true);
+            if (Input.GetKeyDown(KeyCode.Space) && stamina >= 15)
+            {
+                FixBike();
+            }
+            else if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                StartCoroutine(EndGame(false));
+            }
         }
-        else if(Input.GetKeyDown(KeyCode.Escape))
+        else
         {
-            EndGame(false);
+            UiManager.uiScript.UpSideDownAndStaminaOffUI(true);
+            StartCoroutine(EndGame(false));
         }
+        
         
     }
 
@@ -213,30 +223,37 @@ public class RideBMX : MonoBehaviour
         Gizmos.color = Color.blue;
         Gizmos.DrawLine(backTireRB.position, backTireRB.position + Vector2.down * rayDistance);
     }
-    public void EndGame(bool isWin)
+    public IEnumerator EndGame(bool isWin)
     {
         Debug.Log("Girdi uğlumuz");
-        if (timer>0)
+        yield return new WaitForSecondsRealtime(timer);
+        Timer.timerScript.isBMXTimerWorking = false;
+        Time.timeScale = 0f;
+        if (isWin)
         {
-            timer -= Time.deltaTime;
+            Debug.Log("NO WAAAAY");//win
+            UiManager.uiScript.winOrLoseUI.SetActive(true);
+            UiManager.uiScript.statusWinLoseUI.text="Congrats you win";
+            UiManager.uiScript.congratsOrBlameUI.text= "You are a great cyclist on moon";
         }
-        else if (timer <= 0)
+        else
         {
-            if (isWin)
-            {
-                Debug.Log("NO WAAAAY");
-            }
-            else
-            {
-                Debug.Log("Loser");
-            }
+            Debug.Log("Loser");
+            UiManager.uiScript.winOrLoseUI.SetActive(true);
+            UiManager.uiScript.statusWinLoseUI.text = "Shame on you";
+            UiManager.uiScript.congratsOrBlameUI.text = "Boooo";//Niggas in Paris
+            
         }
-        
+
+
+
     }
 
     public void RefullStamina(float staminaAdd)
     {
         staminaOffTimer = 5f;
+        UiManager.uiScript.countDownUI.SetActive(false);
+        UiManager.uiScript.staminaOffGO.SetActive(false);
         stamina += staminaAdd;
         if (stamina > 100)
         {
@@ -250,7 +267,7 @@ public class RideBMX : MonoBehaviour
     {
         bmxSpeed = 0;
         isGround = true;
-        UiManager.uiScript.UpsideDownUI(true);
+        
         PauseGame();
     }
 
@@ -263,4 +280,5 @@ public class RideBMX : MonoBehaviour
     {
         Time.timeScale = 1;
     }
+
 }
