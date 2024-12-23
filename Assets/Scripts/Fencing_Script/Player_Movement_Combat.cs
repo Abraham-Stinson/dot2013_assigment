@@ -61,6 +61,7 @@ public class Player_Movement_Combat : MonoBehaviour
     const string player_top_defence = "player_top_defence";
     const string player_bottom_defence = "player_bottom_defence";
     const string player_stun = "player_stun";
+    const string player_Passed_Out = "player_passed_out";
 
     float xMovement;
 
@@ -412,7 +413,7 @@ public class Player_Movement_Combat : MonoBehaviour
     // Defence
     void TopDefence()
     {
-        AnimationManager("top_player_defence");
+        AnimationManager("player_top_defence");
         playerStatusCombat = "top_Defence";
     }
 
