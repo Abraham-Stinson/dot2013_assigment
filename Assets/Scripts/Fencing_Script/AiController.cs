@@ -30,7 +30,7 @@ public class AiController : MonoBehaviour
     [SerializeField] private Transform rightWall;
     [SerializeField] private float attackRangeTop = 0.5f;
     [SerializeField] private float attackRangeBottom = 0.5f;
-    [SerializeField] private float aiCloseCombatRange = 2f;
+    [SerializeField] private float aiCloseCombatRange = 10f;
 
     [SerializeField] private float speedAI = 3f;
     [SerializeField] private float dashSpeedAI = 15f;
@@ -112,14 +112,14 @@ public class AiController : MonoBehaviour
         canDoSomething = false;
 
         
-        yield return new WaitForSeconds(thinkTime);
+        
 
         if (!isStunned)
         {
             
             if (distancingToPlayer() < aiCloseCombatRange)
             {
-                movemetAction = Random.Range(1, 9);
+                movemetAction = Random.Range(5, 9);
             }
             else
             {
@@ -179,6 +179,8 @@ public class AiController : MonoBehaviour
             }
 
         }
+        yield return new WaitForSeconds(thinkTime);
+        AnimationManager("ai_idle");
         canDoSomething = true;
     }
 
@@ -261,15 +263,17 @@ public class AiController : MonoBehaviour
         return Vector3.Distance(transform.position,rightWall.position);
     }
 
-    void TopAttack()
+    private void TopAttack()
     {
         aiStatusCombat = "top_Attack_Idle";
         StartCoroutine(waitingTakingStance());
-        if (staminaAI >= 20&& distancingToPlayer() <= 1.75f)
+        if (staminaAI >= 20)
         {
+            Debug.Log("Üstten vurdu");
             staminaAI -= 20f;
             aiStatusCombat = "top attacking";
             AnimationManager("ai_top_attack");
+            //yield return new WaitForSeconds(1f);
             Collider2D[] hitPlayer = Physics2D.OverlapCircleAll(attackPointTopAI.position, attackRangeTop, oppositePlayerAI);
             foreach (Collider2D Player_1 in hitPlayer)
             { 
@@ -277,6 +281,10 @@ public class AiController : MonoBehaviour
                 {
                     Debug.Log("Player_1 Defended the AI's top attack");
                     staminaAI -= 5;
+                }
+                else if (Player_Movement_Combat.playerScript.playerStatusCombat == "top_Attack")
+                {
+                    Debug.Log("Kılıçlar çarpışır topraaam");
                 }
                 else
                 {
@@ -293,15 +301,17 @@ public class AiController : MonoBehaviour
         }
     }
 
-    void BottomAttack()
+    private void BottomAttack()
     {
         aiStatusCombat = "bot_Attack_Idle";
         StartCoroutine(waitingTakingStance());
-        if (staminaAI >= 20 && distancingToPlayer() <= 1.75f)
+        
+        if (staminaAI >= 20)
         {
             staminaAI -= 20f;
             aiStatusCombat = "bot_attacking";
             AnimationManager("ai_bottom_attack");
+            //yield return new WaitForSeconds(1f);
             Collider2D[] hitPlayer = Physics2D.OverlapCircleAll(attackPointBottomAI.position, attackRangeBottom, oppositePlayerAI);
             foreach (Collider2D Player_1 in hitPlayer)
             {
@@ -309,6 +319,10 @@ public class AiController : MonoBehaviour
                 {
                     Debug.Log("Player_1 Defended the AI's bottom attack");
                     staminaAI -= 5;
+                }
+                else if (Player_Movement_Combat.playerScript.playerStatusCombat== "bottom_Attack")
+                {
+                    Debug.Log("Kılıçlar çarpışır topraaam");
                 }
                 else
                 {
@@ -328,9 +342,8 @@ public class AiController : MonoBehaviour
 
     private IEnumerator HittingEvent()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.5f);
         Round_Manager.roundManagerScript.EndRound("ai");
-        
     }
 
     IEnumerator waitingTakingStance()
@@ -404,7 +417,7 @@ public class AiController : MonoBehaviour
         else
         {
             aiStunnedUI.text = "no stunned";
-            AnimationManager("ai_idle");
+            
             aiStatusCombat = "idle";
             aiStatusMoving = "idle";
         }
@@ -447,7 +460,7 @@ public class AiController : MonoBehaviour
         Debug.Log(thinkTime);
     }
 
-    private void AnimationManager(string newState)
+    public void AnimationManager(string newState)
     {
         if (newState == currentState)
         {
@@ -456,6 +469,11 @@ public class AiController : MonoBehaviour
 
         animator.Play(newState);
         currentState = newState;
+
+        if (newState != ai_idle)
+        {
+            aiStatusMoving = newState;
+        }
     }
 
 }

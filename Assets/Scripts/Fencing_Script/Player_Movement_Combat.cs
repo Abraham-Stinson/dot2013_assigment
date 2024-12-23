@@ -359,6 +359,10 @@ public class Player_Movement_Combat : MonoBehaviour
                 stamina -= 5;
                 Debug.Log("AI Defended the Player_1's top attack");
             }
+            else if (AiController.aiScript.aiStatusCombat == "top_Attack")
+            {
+                Debug.Log("Kılıçlar çarpışır topraaam");
+            }
             else
             {
                 //Animation is here
@@ -382,6 +386,10 @@ public class Player_Movement_Combat : MonoBehaviour
                 stamina -= 5;
                 Debug.Log("AI Defended the Player_1's bottom attack");
             }
+            else if (AiController.aiScript.aiStatusCombat == "bottom_Attack")
+            {
+                Debug.Log("Kılıçlar çarpışır topraaam");
+            }
             else
             {
                 //Animation is here
@@ -394,7 +402,8 @@ public class Player_Movement_Combat : MonoBehaviour
     }
     private IEnumerator HittingEvent()
     {
-        yield return new WaitForSeconds(1f);
+        Time.timeScale = 0f;
+        yield return new WaitForSecondsRealtime(0.5f);
         Round_Manager.roundManagerScript.EndRound("player");
 
     }
@@ -490,7 +499,7 @@ public class Player_Movement_Combat : MonoBehaviour
         stamina = maxStamina;
     }
 
-    private void AnimationManager(string newState)
+    public void AnimationManager(string newState)
     {
         if (newState == currentState)
         {

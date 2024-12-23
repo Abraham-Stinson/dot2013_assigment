@@ -128,12 +128,16 @@ public class Round_Manager : MonoBehaviour
         playerTransform.position = playerStartPos;
         aiTransform.position = aiStartPos;
 
+
         AiController.aiScript.ResetStamina();
         Player_Movement_Combat.playerScript.ResetStamina();
     }
     public void EndRound(string whoHit)
     {
         isSetActive = false;
+
+        AiController.aiScript.AnimationManager("ai_idle");
+        Player_Movement_Combat.playerScript.AnimationManager("player_idle");
 
         if (whoHit == "player")
         {
