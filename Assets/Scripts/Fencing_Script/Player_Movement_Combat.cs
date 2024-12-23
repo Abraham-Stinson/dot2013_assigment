@@ -92,6 +92,7 @@ public class Player_Movement_Combat : MonoBehaviour
     {
         animator = gameObject.GetComponent<Animator>();
         AnimationClip[] clips = animator.runtimeAnimatorController.animationClips;
+
         stunnedUI.text = "start and no stun";
         combatStatusUI.text = "";
         movementStatusUI.text = " ";

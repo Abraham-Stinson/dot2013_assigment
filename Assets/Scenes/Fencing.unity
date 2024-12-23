@@ -1081,7 +1081,7 @@ Transform:
   m_GameObject: {fileID: 384280295}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.75, y: 0, z: 0}
+  m_LocalPosition: {x: -0.769, y: 0.223, z: 0}
   m_LocalScale: {x: 1, y: 0.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2660,7 +2660,7 @@ Transform:
   m_GameObject: {fileID: 1025835834}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1, y: 0.5, z: 0}
+  m_LocalPosition: {x: -0.579, y: 0.358, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3111,7 +3111,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 133.3}
-  m_SizeDelta: {x: 149.6, y: 45.7}
+  m_SizeDelta: {x: 237.3, y: 45.81}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1210078265
 MonoBehaviour:
@@ -4678,7 +4678,7 @@ Transform:
   m_GameObject: {fileID: 1596073004}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -6.97, y: -4, z: 0}
+  m_LocalPosition: {x: -6.97, y: -3.5, z: 0}
   m_LocalScale: {x: 6.26, y: 6.26, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -5380,6 +5380,7 @@ GameObject:
   - component: {fileID: 1936304928}
   - component: {fileID: 1936304922}
   - component: {fileID: 1936304927}
+  - component: {fileID: 1936304929}
   m_Layer: 8
   m_Name: Player_2
   m_TagString: Player_2
@@ -5434,7 +5435,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 46582b3f6eafadc43803e836fc844164, type: 2}
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -5452,10 +5453,10 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: -9095717837082945937, guid: bd3cb4af8406d4436a2ae8c2aafe1f8d, type: 3}
+  m_SortingLayerID: -981467139
+  m_SortingLayer: 1
+  m_SortingOrder: -81
+  m_Sprite: {fileID: 21300000, guid: 2a206c0a0b70bf6469025e2b039b346a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -5475,8 +5476,8 @@ Transform:
   m_GameObject: {fileID: 1936304920}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 5, y: -3, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 5.38, y: -3.5, z: 0}
+  m_LocalScale: {x: 6.26, y: 6.26, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1025835835}
@@ -5515,8 +5516,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_Size: {x: 1, y: 2}
+  m_Offset: {x: -0.25, y: 0.27}
+  m_Size: {x: 0.28, y: 0.41}
   m_Direction: 0
 --- !u!114 &1936304928
 MonoBehaviour:
@@ -5525,7 +5526,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1936304920}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a833d43de53279f489fc5982005155fc, type: 3}
   m_Name: 
@@ -5577,8 +5578,9 @@ MonoBehaviour:
   attackPointTopAI: {fileID: 1025835835}
   attackPointBottomAI: {fileID: 384280296}
   rightWall: {fileID: 801284022}
-  attackRangeAI: 0.5
-  aiCloseCombatRange: 2
+  attackRangeTop: 1
+  attackRangeBottom: -2.39
+  aiCloseCombatRange: 7
   speedAI: 5
   dashSpeedAI: 15
   dashDuration: 0.3
@@ -5589,6 +5591,27 @@ MonoBehaviour:
   maxStamina: 100
   staminaRegenSpeed: 10
   isAiTakeDamage: 0
+--- !u!95 &1936304929
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1936304920}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: a63d5a82a828e9848bc2ac82891101ec, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &1973136821
 GameObject:
   m_ObjectHideFlags: 0
