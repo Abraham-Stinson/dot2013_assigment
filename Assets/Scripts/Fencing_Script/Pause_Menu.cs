@@ -32,7 +32,7 @@ public class Pause_Menu : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape)&&!Round_Manager.roundManagerScript.inNextRoundUI)
+        if (Input.GetKeyDown(KeyCode.Escape) && !Round_Manager.roundManagerScript.inNextRoundUI)
         {
             if (isPaused)
             {

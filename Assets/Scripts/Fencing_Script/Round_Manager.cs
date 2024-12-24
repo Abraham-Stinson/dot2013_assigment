@@ -85,7 +85,8 @@ public class Round_Manager : MonoBehaviour
     {
         if (playerScore < 15 && aiScore < 15)
         {
-            
+            AiController.aiScript.isAiTakeDamage = false;
+            Player_Movement_Combat.playerScript.isPlayerTakeDamage = false;
             isSetActive = true;
             ResetPlayerStatus();
 
@@ -127,12 +128,16 @@ public class Round_Manager : MonoBehaviour
         playerTransform.position = playerStartPos;
         aiTransform.position = aiStartPos;
 
+
         AiController.aiScript.ResetStamina();
         Player_Movement_Combat.playerScript.ResetStamina();
     }
     public void EndRound(string whoHit)
     {
         isSetActive = false;
+
+        AiController.aiScript.AnimationManager("ai_idle");
+        Player_Movement_Combat.playerScript.AnimationManager("player_idle");
 
         if (whoHit == "player")
         {
