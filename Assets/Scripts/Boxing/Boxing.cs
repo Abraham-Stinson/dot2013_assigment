@@ -12,43 +12,64 @@ public class Boxing : MonoBehaviour
     public GameObject RightGlove;
     public bool isPunchedRight=false;
     public bool isPunchedLeft=false;
+    bool isDodge = false;
     public GameObject cin;
     public string cinTransform, playerTransform;
-    int cinRandom = 0,randomInvoke=0;
+    int cinRandomTransform = 0,cinRandomInvoke=0,cinRandomPunchInvoke=0;
+    public int cinHealth = 10000,playerHealth=100;
     SpriteRenderer cinSpriteRenderer;
 
     void Start()
     {
-        cinRandom = Random.Range(0, 3);
-        randomInvoke= Random.Range(1, 3);
-        Invoke("RandomCinTransform1", randomInvoke);
+        cinRandomPunchInvoke = Random.Range(1, 5);
+        cinRandomTransform = Random.Range(0, 3);
+        cinRandomInvoke= Random.Range(1, 3);
+        Invoke("CinRandomPunch1", cinRandomPunchInvoke);
+        Invoke("RandomCinTransform1", cinRandomInvoke);
         cinSpriteRenderer= cin.GetComponent<SpriteRenderer>();
+    }
+    void CinRandomPunch1()
+    {
+        //cin.transform.localScale = new Vector3(3.217957f, 3.217957f, 3.217957f);
+        cinRandomPunchInvoke = Random.Range(1, 5);
+        if (cinTransform == playerTransform&&(isDodge==false))
+        {
+            playerHealth -= 5;
+        }
+        cin.transform.localScale = new Vector3(5, 5, 5);
+        Invoke("CinRandomPunch2", cinRandomPunchInvoke);
+    }
+    void CinRandomPunch2()
+    {
+        cin.transform.localScale = new Vector3(3.217957f, 3.217957f, 3.217957f);
+        cinRandomPunchInvoke = Random.Range(1, 2);
+        Invoke("CinRandomPunch1", cinRandomPunchInvoke);
     }
     void RandomCinTransform1()
     {
-        cinRandom = Random.Range(0, 3);
-        randomInvoke = Random.Range(1, 3);
-        Invoke("RandomCinTransform2", randomInvoke);
+        cinRandomTransform = Random.Range(0, 3);
+        cinRandomInvoke = Random.Range(1, 3);
+        Invoke("RandomCinTransform2", cinRandomInvoke);
     }
     void RandomCinTransform2()
     {
-        cinRandom = Random.Range(0, 3);
-        randomInvoke = Random.Range(1, 3);
-        Invoke("RandomCinTransform1", randomInvoke);
+        cinRandomTransform = Random.Range(0, 3);
+        cinRandomInvoke = Random.Range(1, 3);
+        Invoke("RandomCinTransform1", cinRandomInvoke);
     }
 
     void FixedUpdate()
     {
         
-        if (cinRandom==0)
+        if (cinRandomTransform==0)
         {
             cin.transform.position = new Vector3(-6f, -1.3815f, -0.33f);
         }
-        if (cinRandom == 1)
+        if (cinRandomTransform == 1)
         {
             cin.transform.position = new Vector3(0f, -1.3815f, -0.33f);
         }
-        if (cinRandom == 2)
+        if (cinRandomTransform == 2)
         {
             cin.transform.position = new Vector3(6f, -1.3815f, -0.33f);
         }
@@ -98,7 +119,7 @@ public class Boxing : MonoBehaviour
         }
         if (isPunchedLeft==true && cinTransform==playerTransform|| isPunchedRight == true && cinTransform == playerTransform)
         {
-            cinSpriteRenderer.color= Color.red;
+            cinHit();
         }
         else
         {
@@ -109,6 +130,24 @@ public class Boxing : MonoBehaviour
             Debug.Log("Hit");
             cinSpriteRenderer.color = Color.red;
         }*/
+    }
+    public void cinHit()
+    {
+        if (isPunchedLeft == true && cinTransform == playerTransform && isPunchedRight == true && cinTransform == playerTransform)
+        {
+            //Dodge Area
+            cinSpriteRenderer.color = Color.white;
+            isDodge = true;
+        }
+        else
+        {
+            //Punch Area
+            isDodge=false;
+            cinSpriteRenderer.color = Color.red;
+            cinHealth -= 1;
+            //isPunchedLeft= false;
+           // isPunchedRight= false;
+        }
     }
     public void LeftPunch()
     {
