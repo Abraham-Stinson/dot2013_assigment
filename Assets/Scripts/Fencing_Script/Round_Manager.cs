@@ -87,6 +87,7 @@ public class Round_Manager : MonoBehaviour
         {
             AiController.aiScript.isAiTakeDamage = false;
             Player_Movement_Combat.playerScript.isPlayerTakeDamage = false;
+
             isSetActive = true;
             ResetPlayerStatus();
 
@@ -128,12 +129,18 @@ public class Round_Manager : MonoBehaviour
         playerTransform.position = playerStartPos;
         aiTransform.position = aiStartPos;
 
+        AiController.aiScript.canDoSomething = true;
+        Player_Movement_Combat.playerScript.canAttackOrDefend = true;
+
+        AiController.aiScript.isAiTakeDamage = false;
+        Player_Movement_Combat.playerScript.isPlayerTakeDamage = false;
 
         AiController.aiScript.ResetStamina();
         Player_Movement_Combat.playerScript.ResetStamina();
     }
     public void EndRound(string whoHit)
     {
+        Time.timeScale = 0;
         isSetActive = false;
 
         AiController.aiScript.AnimationManager("ai_idle");
@@ -141,11 +148,20 @@ public class Round_Manager : MonoBehaviour
 
         if (whoHit == "player")
         {
+            if (Player_Movement_Combat.playerScript.isPlayerTakeDamage&&!AiController.aiScript.isAiTakeDamage)
+            {
+                return;
+            }
+
             playerScore++;
             whoWon = "Player 1";
         }
         else if (whoHit == "ai")
         {
+            if (AiController.aiScript.isAiTakeDamage&&!Player_Movement_Combat.playerScript.isPlayerTakeDamage)
+            {
+                return;
+            }
             aiScore++;
             whoWon = "Ai";
         }
@@ -176,7 +192,6 @@ public class Round_Manager : MonoBehaviour
         afterHitUI.SetActive(true);
         inNextRoundUI = true;
         isSetTimerWorking = false;
-        Time.timeScale = 0f;
 
         int countDown = 3;
 

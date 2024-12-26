@@ -33,7 +33,7 @@ public class Player_Movement_Combat : MonoBehaviour
     [SerializeField] private float staminaRegenSpeed = 10f;
 
     // Movement
-    private bool canAttackOrDefend = true;
+    [SerializeField] public bool canAttackOrDefend = true;
     [SerializeField] private float speed = 5f;
     [SerializeField] private float dashSpeed = 20f;
     [SerializeField] private float dashTime = 0.2f;
@@ -76,7 +76,7 @@ public class Player_Movement_Combat : MonoBehaviour
     bool isTopDefending = false;
     bool isBottomDefending = false;
 
-    [SerializeField] public bool isPlayerTakeDamage = false;
+    [SerializeField] public bool isPlayerTakeDamage = false;//çakışma olmasın
 
     [SerializeField] private float attackCoolDown = 0.5f;
     [SerializeField] float nextAttackTime = 0f;
@@ -104,7 +104,7 @@ public class Player_Movement_Combat : MonoBehaviour
         //Debug.Log(currentState);
         UpdatingUI();
         Controller();
-
+        isAliveControl();
     }
    
     private void FixedUpdate()
@@ -167,11 +167,18 @@ public class Player_Movement_Combat : MonoBehaviour
             }
         }
     }
+    private void isAliveControl()
+    {
+        if (isPlayerTakeDamage)
+        {
+            canAttackOrDefend = false;
+        }
+    }
 
     #region CONTROLLER
     private void Controller()
     {
-        Debug.Log("Gard alıyon muu " + isTakingGuardOnAttack);
+        //Debug.Log("Gard alıyon muu " + isTakingGuardOnAttack);
         if (!Pause_Menu.isPaused && !Round_Manager.roundManagerScript.inNextRoundUI && !Round_Manager.roundManagerScript.isGameEnd && canAttackOrDefend)
         {
             xMovement = Input.GetAxis("Horizontal");
@@ -363,7 +370,7 @@ public class Player_Movement_Combat : MonoBehaviour
             {
                 Debug.Log("Kılıçlar çarpışır topraaam");
             }
-            else
+            else if(!AiController.aiScript.isAiTakeDamage)
             {
                 //Animation is here
                 AiController.aiScript.isAiTakeDamage = true;
@@ -390,19 +397,20 @@ public class Player_Movement_Combat : MonoBehaviour
             {
                 Debug.Log("Kılıçlar çarpışır topraaam");
             }
-            else
+            else if (!AiController.aiScript.isAiTakeDamage)
             {
                 //Animation is here
                 AiController.aiScript.isAiTakeDamage = true;
                 StartCoroutine(HittingEvent());
+                Debug.Log("Hit bot attack to player 2");
                 StartCoroutine(HittingWaitForASeconds());
-                Debug.Log("Hit bottom attack to player 2");
             }
         }
     }
     private IEnumerator HittingEvent()
     {
-        Time.timeScale = 0f;
+        
+        //Time.timeScale = 0f;
         yield return new WaitForSecondsRealtime(0.5f);
         Round_Manager.roundManagerScript.EndRound("player");
 

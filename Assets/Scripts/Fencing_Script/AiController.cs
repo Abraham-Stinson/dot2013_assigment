@@ -36,7 +36,7 @@ public class AiController : MonoBehaviour
     [SerializeField] private float dashSpeedAI = 15f;
     [SerializeField] private float dashDuration = 0.3f;
     [SerializeField] private float thinkTime = 1f;
-    [SerializeField] private bool canDoSomething = true;
+    [SerializeField] public bool canDoSomething = true;
     [SerializeField] private bool isStunned = false;
 
     [SerializeField] private float staminaAI, maxStamina = 100f;
@@ -80,6 +80,13 @@ public class AiController : MonoBehaviour
         aiIsHit.text = "is hit: no";
         distancePlayer.text="distance: ";
     }
+    private void Update()
+    {
+        if (isAiTakeDamage)
+        {
+            canDoSomething = false;
+        }
+    }
 
     void FixedUpdate()
     {
@@ -109,10 +116,8 @@ public class AiController : MonoBehaviour
 
     IEnumerator ActionAi()
     {
+        yield return new WaitForSeconds(thinkTime);
         canDoSomething = false;
-
-        
-        
 
         if (!isStunned)
         {
@@ -153,12 +158,12 @@ public class AiController : MonoBehaviour
                     break;
 
                 case 4:
-                    if (staminaAI >= 15f && distancingToPlayer() > 3f)
+                    if (staminaAI >= 15f && distancingToPlayer() > 8f)
                     {
                         StartCoroutine(AiDash(Vector2.left, 'l'));
                         staminaAI -= 15f;
                     }
-                    else if (distancingToPlayer() <= 2f && DistanceWall() <= 2f && IsWallBehind())
+                    else if (distancingToPlayer() <= 6f && DistanceWall() <= 3f && IsWallBehind())
                     {
                         StartCoroutine(AiDash(Vector2.left, 'l'));
                         staminaAI -= 15f;
@@ -286,16 +291,14 @@ public class AiController : MonoBehaviour
                 {
                     Debug.Log("Kılıçlar çarpışır topraaam");
                 }
-                else
+                else if (!Player_Movement_Combat.playerScript.isPlayerTakeDamage && !isAiTakeDamage)
                 {
                     //Animation is here
-
                     Player_Movement_Combat.playerScript.isPlayerTakeDamage = true;
-                    StartCoroutine(HittingEvent());
                     //hit status
                     Debug.Log("Enemy bot hit from top to player!");
                     //StartCoroutine(HittingWaitForASeconds());
-
+                    StartCoroutine(HittingEvent());
                 }
             }
         }
@@ -308,15 +311,18 @@ public class AiController : MonoBehaviour
         
         if (staminaAI >= 20)
         {
+            Debug.Log("Dışarısı çalışıyor toprrram " + Player_Movement_Combat.playerScript.isPlayerTakeDamage);
             staminaAI -= 20f;
             aiStatusCombat = "bot_attacking";
             AnimationManager("ai_bottom_attack");
-            //yield return new WaitForSeconds(1f);
+
             Collider2D[] hitPlayer = Physics2D.OverlapCircleAll(attackPointBottomAI.position, attackRangeBottom, oppositePlayerAI);
             foreach (Collider2D Player_1 in hitPlayer)
             {
+                Debug.Log("İçerisi çalışıyor toprrram " + Player_Movement_Combat.playerScript.isPlayerTakeDamage);
                 if (Player_Movement_Combat.playerScript.playerStatusCombat == "bottom_Defence")
                 {
+
                     Debug.Log("Player_1 Defended the AI's bottom attack");
                     staminaAI -= 5;
                 }
@@ -324,17 +330,14 @@ public class AiController : MonoBehaviour
                 {
                     Debug.Log("Kılıçlar çarpışır topraaam");
                 }
-                else
+                else if (!Player_Movement_Combat.playerScript.isPlayerTakeDamage&&!isAiTakeDamage)
                 {
                     //Animation is here
-
                     Player_Movement_Combat.playerScript.isPlayerTakeDamage = true;
-                    StartCoroutine(HittingEvent());
-
                     //hit status
                     Debug.Log("Enemy bot hit from bottom to player!");
                     //StartCoroutine(HittingWaitForASeconds());
-
+                    StartCoroutine(HittingEvent());
                 }
             }
         }
@@ -457,7 +460,7 @@ public class AiController : MonoBehaviour
         { 
             thinkTime = 1.0f;
         }
-        Debug.Log(thinkTime);
+        //Debug.Log(thinkTime);
     }
 
     public void AnimationManager(string newState)

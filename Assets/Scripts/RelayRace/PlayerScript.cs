@@ -25,8 +25,20 @@ public class PlayerScript : MonoBehaviour
     [Header("Laps")]
     [SerializeField] private int totalLaps = 4;
     [SerializeField] private int currentLap = 1;
+
+    [Header("Input")]
+    [SerializeField] private bool canInput = true;
+
+    [Header("Animation")]
+    Animator animator;
+    private const string normalRunningPlayer = "Normal_Player_Runner";
+    private const string topRunningPlayer = "Top_Player_Runner";
+    private const string fliippedNormalRunningPlayer = "Flipped_Normal_Player_Runner";
+
     void Start()
     {
+        animator = GetComponent<Animator>();
+
         currentSpeed = minSpeed;
         InvokeRepeating("DecaySpeed", 1.0f, 1.0f);
     }
@@ -36,38 +48,43 @@ public class PlayerScript : MonoBehaviour
         HandleInput();
         MoveToNextWaypoint();
 
-
+        ChangeAnimationDueToWayPoint();
         //Debugs
+        animator.speed = currentSpeed/2;
         Debug.Log(currentSpeed);
 
     }
 
     private void HandleInput()
     {
-        if (Input.GetKeyDown(KeyCode.A))
+        if (canInput)
         {
-            if (!lastKeyWasA)
+            if (Input.GetKeyDown(KeyCode.A))
             {
-                lastKeyWasA = true;
-                IncreaseSpeed();
+                if (!lastKeyWasA)
+                {
+                    lastKeyWasA = true;
+                    IncreaseSpeed();
+                }
+                else
+                {
+                    DecreaseSpeed();
+                }
             }
-            else
+            if (Input.GetKeyDown(KeyCode.D))
             {
-                DecreaseSpeed();
+                if (lastKeyWasA)
+                {
+                    lastKeyWasA = false;
+                    IncreaseSpeed();
+                }
+                else
+                {
+                    DecreaseSpeed();
+                }
             }
         }
-        if (Input.GetKeyDown(KeyCode.D))
-        {
-            if (lastKeyWasA)
-            {
-                lastKeyWasA = false;
-                IncreaseSpeed();
-            }
-            else
-            {
-                DecreaseSpeed();
-            }
-        }
+        
     }
 
     private void IncreaseSpeed()
@@ -115,5 +132,35 @@ public class PlayerScript : MonoBehaviour
     {
         Debug.Log("Bitti oğlumuz yaaav");
         currentSpeed = 0;
+        canInput = false;
+    }
+    private void ChangeAnimationDueToWayPoint()
+    {
+        if (currentWaypointIndex <= 3)//top runner
+        {
+            AnimationManager(normalRunningPlayer);
+        }
+        else if(currentWaypointIndex >3  && currentWaypointIndex <= 9)//right runner
+        {
+            AnimationManager(normalRunningPlayer);
+            
+        }
+        else if(currentWaypointIndex >9  && currentWaypointIndex <= 15)//bottom runner
+        {
+            AnimationManager(fliippedNormalRunningPlayer);
+        }
+        else if(currentWaypointIndex >15  && currentWaypointIndex <= 21) //left runner
+        {
+            AnimationManager(topRunningPlayer);
+        }
+        else if(currentWaypointIndex > 21)//top runner
+        {
+            AnimationManager(normalRunningPlayer);
+        }
+    }
+
+    private void AnimationManager(string animation)
+    {
+        animator.Play(animation);
     }
 }
