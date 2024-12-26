@@ -34,8 +34,8 @@ public class Player_Movement_Combat : MonoBehaviour
 
     // Movement
     [SerializeField] public bool canAttackOrDefend = true;
-    [SerializeField] private float speed = 5f;
-    [SerializeField] private float dashSpeed = 20f;
+    [SerializeField] private float speed = 2f;
+    [SerializeField] private float dashSpeed = 10f;
     [SerializeField] private float dashTime = 0.2f;
     [SerializeField] private float doubleTapTime = 0.2f;
     private float lastTapTimeA, lastTapTimeD;
@@ -135,6 +135,7 @@ public class Player_Movement_Combat : MonoBehaviour
 
             if (isTopAttacking)
             {
+                AnimationManager("player_top_attack");
                 TopAttack();
                 //Debug.Log("Yukardan Vuruyoz ya olumuz");
                 isTopAttacking = false;
@@ -356,7 +357,7 @@ public class Player_Movement_Combat : MonoBehaviour
     {
         StaminaCost(20f);
         playerStatusCombat = "top_Attack";
-        AnimationManager("player_top_attack");
+        
 
         Collider2D[] hitEnemy = Physics2D.OverlapCircleAll(attackPointTop.position, attackRangeTop, oppositePlayer);
         foreach (Collider2D Player_2 in hitEnemy)
@@ -385,6 +386,7 @@ public class Player_Movement_Combat : MonoBehaviour
     {
         StaminaCost(20f);
         playerStatusCombat = "bottom_Attack";
+
         Collider2D[] hitEnemy = Physics2D.OverlapCircleAll(attackPointBottom.position, attackRangeBottom, oppositePlayer);
         foreach (Collider2D Player_2 in hitEnemy)
         {

@@ -4915,7 +4915,7 @@ MonoBehaviour:
   staminaRegenSpeed: 10
   canAttackOrDefend: 1
   speed: 5
-  dashSpeed: 15
+  dashSpeed: 10
   dashTime: 0.2
   doubleTapTime: 0.2
   canMove: 1
@@ -5715,9 +5715,9 @@ MonoBehaviour:
   attackRangeBottom: 1.9
   aiCloseCombatRange: 7
   speedAI: 5
-  dashSpeedAI: 15
-  dashDuration: 0.3
-  thinkTime: 0.75
+  dashSpeedAI: 10
+  dashDuration: 0.2
+  thinkTime: 1.5
   canDoSomething: 1
   isStunned: 0
   staminaAI: 0

@@ -137,6 +137,8 @@ public class Round_Manager : MonoBehaviour
 
         AiController.aiScript.ResetStamina();
         Player_Movement_Combat.playerScript.ResetStamina();
+
+        AiController.aiScript.movemetAction = 0;
     }
     public void EndRound(string whoHit)
     {
