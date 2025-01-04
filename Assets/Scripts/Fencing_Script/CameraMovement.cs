@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Drawing;
 using UnityEngine;
 
 public class CameraMovement : MonoBehaviour
@@ -15,7 +14,10 @@ public class CameraMovement : MonoBehaviour
     [SerializeField] private float zoomSpeed = 5f;
     [SerializeField] private float minDistance = 0f, maxDistance = 30f;
     [SerializeField] private float minYPosition = -2f, maxYPosition = 2f;
+    [SerializeField] private float minXPosition = -5f, maxXPosition = 5f;
+
     Camera cam;
+
     void Start()
     {
         cam = GetComponent<Camera>();
@@ -28,13 +30,13 @@ public class CameraMovement : MonoBehaviour
         CameraMove(distanceRatio);
         CameraZoom(distanceRatio);
     }
-    
+
     void CameraZoom(float distanceRatio)
     {
-        
-        float cameraZoom = Mathf.Lerp(minSize,maxSize, distanceRatio);
-        cam.orthographicSize = Mathf.Lerp(cam.orthographicSize,cameraZoom,Time.deltaTime*zoomSpeed);
+        float cameraZoom = Mathf.Lerp(minSize, maxSize, distanceRatio);
+        cam.orthographicSize = Mathf.Lerp(cam.orthographicSize, cameraZoom, Time.deltaTime * zoomSpeed);
     }
+
     void CameraMove(float distanceRatio)
     {
         float firstPlayerXPosition = firstPlayer.position.x;
@@ -42,7 +44,10 @@ public class CameraMovement : MonoBehaviour
         float betweenPlayer = firstPlayerXPosition - secondPlayerXPosition;
         cameraXPosition = (firstPlayerXPosition + secondPlayerXPosition) / 2;
 
-        float cameraYPosition = Mathf.Lerp(minYPosition,maxYPosition, distanceRatio);
+        // X pozisyonunu min ve max s?n?rlamalara göre k?s?tla
+        cameraXPosition = Mathf.Clamp(cameraXPosition, minXPosition, maxXPosition);
+
+        float cameraYPosition = Mathf.Lerp(minYPosition, maxYPosition, distanceRatio);
         transform.position = new Vector3(cameraXPosition, cameraYPosition, -10);
     }
 }

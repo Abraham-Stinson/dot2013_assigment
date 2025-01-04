@@ -71,6 +71,7 @@ public class AiController : MonoBehaviour
     }
     void Start()
     {
+        
         animator = gameObject.GetComponent<Animator>();
         AnimationClip[] clips = animator.runtimeAnimatorController.animationClips;
 
@@ -78,7 +79,7 @@ public class AiController : MonoBehaviour
         aiStunnedUI.text = "start and no stun";
         aiMovementStatusUI.text = " ";
         aiIsHit.text = "is hit: no";
-        distancePlayer.text="distance: ";
+        distancePlayer.text="";
     }
     private void Update()
     {
@@ -112,7 +113,7 @@ public class AiController : MonoBehaviour
 
             
         }
-        distancePlayer.text = "distance: " + distancingToPlayer().ToString("F1");
+        //distancePlayer.text = "distance: " + distancingToPlayer().ToString("F1");
     }
 
     IEnumerator ActionAi()
