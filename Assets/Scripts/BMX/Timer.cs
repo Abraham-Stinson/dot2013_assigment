@@ -9,13 +9,15 @@ public class Timer : MonoBehaviour
     public static Timer timerScript;
     [SerializeField] private TextMeshProUGUI timerText;
     [SerializeField] public float timer = 180f;
-    [SerializeField] public bool isBMXTimerWorking = true;
+    public bool isBMXTimerWorking = false;
     void Start()
     {
         if (timerScript == null)
         {
             timerScript = this;
         }
+        StartCoroutine(UiManager.uiScript.CountDown());
+
     }
 
     void Update()

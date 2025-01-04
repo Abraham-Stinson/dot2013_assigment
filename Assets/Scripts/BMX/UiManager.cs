@@ -54,7 +54,10 @@ public class UiManager : MonoBehaviour
         winOrLoseUI.SetActive(false);
         upSideDownAndStaminaOffUI.SetActive(false);
 
+        
+
         UpdatingStaminaMeterUI();
+        
     }
 
     // Update is called once per frame
@@ -145,6 +148,7 @@ public class UiManager : MonoBehaviour
             countDown--;
         }
         countDownUI.SetActive(false);
+        Timer.timerScript.isBMXTimerWorking = true;
         Time.timeScale = 1f;
     }
     public void GoToSettings()

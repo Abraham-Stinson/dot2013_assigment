@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Xml.Linq;
 using TMPro;
 using Unity.VisualScripting;
@@ -43,6 +44,8 @@ public class RideBMX : MonoBehaviour
 
     [SerializeField] private float timer = 5f;
 
+    [SerializeField] private Animator animator;
+
 
     void Start()
     {
@@ -69,6 +72,7 @@ public class RideBMX : MonoBehaviour
         MovingTires();
         StaminaOff();
         DecreseStamina();
+        AnimatonPlayer();
         
     }
     private void HandleInput()
@@ -77,7 +81,7 @@ public class RideBMX : MonoBehaviour
 
         inGame = true;
         moveInputX = Input.GetAxisRaw("Horizontal");
-        moveInputY = Input.GetAxisRaw("Vertical");
+        moveInputY = Input.GetAxis("Vertical");
         
     }
     private void MeasuringDistance()
@@ -279,6 +283,25 @@ public class RideBMX : MonoBehaviour
     private void ResumeGame()
     {
         Time.timeScale = 1;
+    }
+
+    private void AnimatonPlayer()
+    {
+        if (moveInputX > 0)
+        {
+            animator.speed = 1;
+            animator.Play("ridingBmxAnimForward");
+        }
+        else if (moveInputX < 0)
+        {
+            animator.speed = 1;
+            animator.Play("ridingBmxAnimBackward");
+        }
+        else
+        {
+            animator.speed = 0;
+        }
+
     }
 
 }
