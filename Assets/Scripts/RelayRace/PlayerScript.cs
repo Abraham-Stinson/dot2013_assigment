@@ -54,10 +54,10 @@ public class PlayerScript : MonoBehaviour
     private float qteTimer;
     [SerializeField] private float qteTimeLimit = 5f;
 
-    [Header("Game Timer")]
+    /*[Header("Game Timer")]
     [SerializeField] private float gameTimer = 180f; // 3 dakika
     [SerializeField] private TextMeshProUGUI timerText;
-    [SerializeField] private GameObject timer;
+    [SerializeField] private GameObject timer;*/
 
     void Start()
     {
@@ -78,7 +78,7 @@ public class PlayerScript : MonoBehaviour
 
         
 
-        if (gameTimer > 0)
+        /*if (gameTimer > 0)
         {
             gameTimer -= Time.deltaTime;
             UpdateGameTimerUI();
@@ -86,7 +86,7 @@ public class PlayerScript : MonoBehaviour
         else
         {
             FinishRace();
-        }
+        }*/
 
         if (!isInQuickTimeEvent)
         {
@@ -191,6 +191,7 @@ public class PlayerScript : MonoBehaviour
         Debug.Log("Oyun bitti!");
         currentSpeed = 0;
         canInput = false;
+        GameManager.gameManagerScript.EndGame(true);
     }
 
     private void ChangeAnimationDueToWayPoint()
@@ -236,7 +237,7 @@ public class PlayerScript : MonoBehaviour
     {
         canInput = false;
         inGame = false;
-        timer.SetActive(false);
+        //timer.SetActive(false);
         currentCombo.Clear();
         comboText.text = string.Empty;
 
@@ -345,6 +346,7 @@ public class PlayerScript : MonoBehaviour
 
     private void CompleteQuickTimeEvent()
     {
+        MatryoshkaAnim();
         float speedBonus = Mathf.Clamp(qteTimeLimit - qteTimer, 0.1f, 1.5f);
         currentSpeed = Mathf.Clamp(savedSpeed + speedBonus, minSpeed, maxSpeed);
 
@@ -352,7 +354,12 @@ public class PlayerScript : MonoBehaviour
         isInQuickTimeEvent = false;
         canInput = true;
         inGame = true;
-        timer.SetActive(true);
+        //timer.SetActive(true);
+    }
+
+    private void MatryoshkaAnim()
+    {
+
     }
 
     private void FailQuickTimeEvent()
@@ -365,10 +372,10 @@ public class PlayerScript : MonoBehaviour
         canInput = true;
         inGame = true;
         currentSpeed = 0;
-        timer.SetActive(true);
+        //timer.SetActive(true);
     }
 
-    private void UpdateGameTimerUI()
+    /*private void UpdateGameTimerUI()
     {
         int minutes = Mathf.FloorToInt(gameTimer / 60f);
         int seconds = Mathf.FloorToInt(gameTimer % 60f);
@@ -378,5 +385,5 @@ public class PlayerScript : MonoBehaviour
         {
 
         }
-    }
+    }*/
 }

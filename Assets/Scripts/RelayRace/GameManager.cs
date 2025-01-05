@@ -129,5 +129,8 @@ public class GameManager : MonoBehaviour
         Application.Quit();
     }
 
+    public void EndGame(bool isWin)
+    {
 
+    }
 }
