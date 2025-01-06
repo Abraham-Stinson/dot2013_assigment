@@ -20,9 +20,10 @@ public class PlayerScript : MonoBehaviour
     [SerializeField] private float acceleration = 0.5f;
     [SerializeField] private float deceleration = 1f;
     [SerializeField] private float decelerationByTime = 1f;
-
     [SerializeField] private float currentSpeed;
     private float savedSpeed;
+    public float speedBonus;
+    [SerializeField] private TextMeshProUGUI SpeedUIText;
 
     [Header("Moving")]
     [SerializeField] private bool lastKeyWasA = false;
@@ -40,10 +41,13 @@ public class PlayerScript : MonoBehaviour
     private const string normalRunningPlayer = "Normal_Player_Runner";
     private const string topRunningPlayer = "Top_Player_Runner";
     private const string fliippedNormalRunningPlayer = "Flipped_Normal_Player_Runner";
+    private const string matryoshkaPlayer = "matryoshka_Player";
+
+    public bool isInMatryoshkaAnim = false;
 
     [Header("Quick Time Event")]
     [SerializeField] private string[] possibleKeys = { "Q", "W", "E", "R" };
-    [SerializeField] private int comboLength = 5; // Başlangıç uzunluğu
+    [SerializeField] private int comboLength = 5;
     [SerializeField] private int maxComboLength = 10;
     private List<string> currentCombo = new List<string>();
     private int currentComboIndex = 0;
@@ -53,6 +57,12 @@ public class PlayerScript : MonoBehaviour
     private bool isInQuickTimeEvent = false;
     private float qteTimer;
     [SerializeField] private float qteTimeLimit = 5f;
+    [SerializeField] private GameObject bonusSpeedUI;
+    [SerializeField] private TextMeshProUGUI bonusSpeedText;
+
+    [SerializeField] private GameObject resutltOfQTE;
+    [SerializeField] private TextMeshProUGUI resutltOfQTEText;
+
 
     /*[Header("Game Timer")]
     [SerializeField] private float gameTimer = 180f; // 3 dakika
@@ -66,6 +76,8 @@ public class PlayerScript : MonoBehaviour
             playerScript = this;
         }
         quickTimeUIPanel.SetActive(false);
+        bonusSpeedUI.SetActive(false);
+        resutltOfQTE.SetActive(false);
         animator = GetComponent<Animator>();
 
         currentSpeed = minSpeed;
@@ -99,15 +111,14 @@ public class PlayerScript : MonoBehaviour
             HandleQuickTimeInput();
             HandleQteTimer();
         }
-
+        UpdatingUI();
         animator.speed = currentSpeed / 2;
     }
 
     private void HandleInput()
     {
-        if (canInput)
+        if (canInput&&inGame)
         {
-            inGame = true;
             if (Input.GetKeyDown(KeyCode.A))
             {
                 if (!lastKeyWasA)
@@ -155,7 +166,7 @@ public class PlayerScript : MonoBehaviour
 
     private void MoveToNextWaypoint()
     {
-        if (isInQuickTimeEvent || currentSpeed <= 0) return;
+        if (isInQuickTimeEvent) return;
 
         if (currentWaypointIndex < waypoints.Length && currentSpeed > 0)
         {
@@ -196,7 +207,11 @@ public class PlayerScript : MonoBehaviour
 
     private void ChangeAnimationDueToWayPoint()
     {
-        if (currentWaypointIndex <= 3) // top runner
+        if (isInMatryoshkaAnim)
+        {
+
+        }
+        else if (currentWaypointIndex <= 3) // top runner
         {
             AnimationManager(normalRunningPlayer);
         }
@@ -240,6 +255,8 @@ public class PlayerScript : MonoBehaviour
         //timer.SetActive(false);
         currentCombo.Clear();
         comboText.text = string.Empty;
+
+        SpeedUIText.text = "";
 
         quickTimeUIPanel.SetActive(true);
         savedSpeed = currentSpeed;
@@ -346,33 +363,59 @@ public class PlayerScript : MonoBehaviour
 
     private void CompleteQuickTimeEvent()
     {
-        MatryoshkaAnim();
-        float speedBonus = Mathf.Clamp(qteTimeLimit - qteTimer, 0.1f, 1.5f);
-        currentSpeed = Mathf.Clamp(savedSpeed + speedBonus, minSpeed, maxSpeed);
-
+        WritingResultUI('w');
         quickTimeUIPanel.SetActive(false);
+        isInMatryoshkaAnim = true;
+        StartCoroutine(MatryoshkaAnim());
+
+        speedBonus = Mathf.Clamp((qteTimer / qteTimeLimit) * 1.5f, 0.1f, 1.5f);
+        currentSpeed = savedSpeed * speedBonus;
         isInQuickTimeEvent = false;
         canInput = true;
         inGame = true;
         //timer.SetActive(true);
     }
 
-    private void MatryoshkaAnim()
-    {
-
-    }
+    
 
     private void FailQuickTimeEvent()
     {
         currentComboIndex = 0;
         UpdateComboUI();
+        isInMatryoshkaAnim = true;
         comboText.color = Color.black;
+        WritingResultUI('l');
         quickTimeUIPanel.SetActive(false);
+        StartCoroutine(MatryoshkaAnim());
         isInQuickTimeEvent = false;
         canInput = true;
         inGame = true;
         currentSpeed = 0;
+
         //timer.SetActive(true);
+    }
+
+    private void WritingResultUI(char isCook)
+    {
+        if (isCook == 'w')
+        {
+            resutltOfQTE.SetActive(true);
+            resutltOfQTEText.text= "You delivered your flag and your speed was multiplied by this number of times based on your delivery time: " + speedBonus.ToString("F1");
+        }
+
+        else if (isCook == 'l')
+        {
+            resutltOfQTE.SetActive(true);
+            resutltOfQTEText.text = "Since you couldn't do the combo correctly, you had a coordination problem while delivering the flag and your speed was reset.";
+        }
+    }
+
+    private IEnumerator MatryoshkaAnim()
+    {
+        AnimationManager(matryoshkaPlayer);
+        yield return new WaitForSeconds(2f);
+       
+        resutltOfQTE.SetActive(false);
     }
 
     /*private void UpdateGameTimerUI()
@@ -386,4 +429,9 @@ public class PlayerScript : MonoBehaviour
 
         }
     }*/
+
+    private void UpdatingUI()
+    {
+        SpeedUIText.text = "Your speed: "+currentSpeed.ToString("F1");
+    }
 }
