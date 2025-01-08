@@ -26,18 +26,22 @@ public class AiScript : MonoBehaviour
     private const string normalRunningAI = "Normal_Ai_Runner";
     private const string topRunningAI = "Top_Ai_Runner";
     private const string fliippedNormalRunningAI = "Flipped_Normal_Ai_Runner";
+    private const string MatryskAnimAI = "matryoshka_AI";
+    public bool isInMatryoshkaAnim=false;
 
     void Start()
     {
         animator = GetComponent<Animator>();
         currentSpeed = minSpeed;
+        InvokeRepeating("ChangingSpeed", 2f,1f);
     }
 
     void Update()
     {
-        ChangingSpeed();
+        //ChangingSpeed();
         MoveToNextWaypoint();
         ChangeAnimationDueToWayPoint();
+        
 
         animator.speed = currentSpeed / 2;
     }
@@ -45,17 +49,17 @@ public class AiScript : MonoBehaviour
     private void ChangingSpeed()
     {
         int currentStation = Random.Range(1, 3);
-
+        
         switch (currentStation)
         {
             case 1://acceleration
-                if (currentSpeed<6)
+                if (currentSpeed<maxSpeed)
                 {
                     currentSpeed += acceleration;
                 }
                 break;
             case 2://decceleration
-                if (currentSpeed > 1)
+                if (currentSpeed > minSpeed)
                 {
                     currentSpeed -= deceleration;
                 }
@@ -88,13 +92,37 @@ public class AiScript : MonoBehaviour
             else
             {
                 StartCoroutine(PassingStafet());
+                //PassingStafet();
             }
         }
     }
 
     private void ChangeAnimationDueToWayPoint()
     {
+        if (isInMatryoshkaAnim)
+        {
 
+        }
+        else if (currentWaypointIndex <= 3) // top runner
+        {
+            AnimationManager(normalRunningAI);
+        }
+        else if (currentWaypointIndex > 3 && currentWaypointIndex <= 9) // right runner
+        {
+            AnimationManager(normalRunningAI);
+        }
+        else if (currentWaypointIndex > 9 && currentWaypointIndex <= 15) // bottom runner
+        {
+            AnimationManager(fliippedNormalRunningAI);
+        }
+        else if (currentWaypointIndex > 15 && currentWaypointIndex <= 21) // left runner
+        {
+            AnimationManager(topRunningAI);
+        }
+        else if (currentWaypointIndex > 21) // top runner
+        {
+            AnimationManager(normalRunningAI);
+        }
     }
 
     private void FinishRace()
@@ -102,8 +130,18 @@ public class AiScript : MonoBehaviour
 
     }
 
+    private void AnimationManager(string animation)
+    {
+        animator.Play(animation);
+    }
+
     private IEnumerator PassingStafet()
     {
-        yield return new WaitForSeconds(1f);
+        savedSpeed = currentSpeed;
+        currentSpeed = 0;
+        yield return new WaitForSeconds(Random.Range(1f,2f));
+        currentSpeed = savedSpeed;
+        AnimationManager(MatryskAnimAI);
+        //yield return new WaitForSeconds(2f);
     }
 }

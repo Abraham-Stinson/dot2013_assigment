@@ -135,5 +135,13 @@ public class GameManager : MonoBehaviour
     public void EndGame(bool isWin)
     {
         // End game logic
+        if (isWin)
+        {
+            Debug.Log("You win");
+        }
+        else
+        {
+            Debug.Log("Lose");
+        }
     }
 }
