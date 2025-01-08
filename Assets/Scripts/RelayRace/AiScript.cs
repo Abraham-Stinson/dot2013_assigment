@@ -5,6 +5,9 @@ using UnityEngine;
 
 public class AiScript : MonoBehaviour
 {
+    public static AiScript aiScript;
+
+    public bool isAvailable = true;
     [Header("Waypoints")]
     [SerializeField] private Transform[] waypoints;
     [SerializeField] private int currentWaypointIndex = 0;
@@ -14,7 +17,7 @@ public class AiScript : MonoBehaviour
     [SerializeField] private float maxSpeed = 7f;
     [SerializeField] private float acceleration = 1f;
     [SerializeField] private float deceleration = 1f;
-    [SerializeField] private float currentSpeed;
+    [SerializeField] public float currentSpeed;
     private float savedSpeed;
 
     [Header("Laps")]
@@ -31,6 +34,10 @@ public class AiScript : MonoBehaviour
 
     void Start()
     {
+        if (aiScript == null)
+        {
+            aiScript = this;
+        }
         animator = GetComponent<Animator>();
         currentSpeed = minSpeed;
         InvokeRepeating("ChangingSpeed", 2f,1f);
@@ -38,11 +45,10 @@ public class AiScript : MonoBehaviour
 
     void Update()
     {
-        //ChangingSpeed();
-        MoveToNextWaypoint();
-        ChangeAnimationDueToWayPoint();
-        
-
+        if (isAvailable) {
+            MoveToNextWaypoint();
+            ChangeAnimationDueToWayPoint();
+        }
         animator.speed = currentSpeed / 2;
     }
 
@@ -127,7 +133,7 @@ public class AiScript : MonoBehaviour
 
     private void FinishRace()
     {
-
+        GameManager.gameManagerScript.EndGame(false);
     }
 
     private void AnimationManager(string animation)
@@ -142,6 +148,5 @@ public class AiScript : MonoBehaviour
         yield return new WaitForSeconds(Random.Range(1f,2f));
         currentSpeed = savedSpeed;
         AnimationManager(MatryskAnimAI);
-        //yield return new WaitForSeconds(2f);
     }
 }

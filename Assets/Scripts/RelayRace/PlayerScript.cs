@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Xml.Linq;
 using TMPro;
 using UnityEngine;
 
@@ -20,14 +21,14 @@ public class PlayerScript : MonoBehaviour
     [SerializeField] private float acceleration = 0.5f;
     [SerializeField] private float deceleration = 1f;
     [SerializeField] private float decelerationByTime = 1f;
-    [SerializeField] private float currentSpeed;
+    [SerializeField] public float currentSpeed;
     private float savedSpeed;
     public float speedBonus;
     [SerializeField] private TextMeshProUGUI SpeedUIText;
 
     [Header("Moving")]
     [SerializeField] private bool lastKeyWasA = false;
-    [SerializeField] private bool isMoving = false;
+    //[SerializeField] private bool isMoving = false;
 
     [Header("Laps")]
     [SerializeField] private int totalLaps = 4;
@@ -79,6 +80,7 @@ public class PlayerScript : MonoBehaviour
         bonusSpeedUI.SetActive(false);
         resutltOfQTE.SetActive(false);
         animator = GetComponent<Animator>();
+        
 
         currentSpeed = minSpeed;
         InvokeRepeating("DecaySpeed", 1.0f, 1.0f);

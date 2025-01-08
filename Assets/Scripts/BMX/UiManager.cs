@@ -130,6 +130,7 @@ public class UiManager : MonoBehaviour
     {
         pauseMenu.SetActive(false);
         StartCoroutine(CountDown());
+
         Timer.timerScript.isBMXTimerWorking = true;
         isPaused = false;
     }
@@ -149,6 +150,7 @@ public class UiManager : MonoBehaviour
         }
         countDownUI.SetActive(false);
         Timer.timerScript.isBMXTimerWorking = true;
+        RideBMX.rideBMXScript.inGame = true;
         Time.timeScale = 1f;
     }
     public void GoToSettings()

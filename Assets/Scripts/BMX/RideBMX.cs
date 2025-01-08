@@ -13,36 +13,41 @@ public class RideBMX : MonoBehaviour
 {
     public static RideBMX rideBMXScript;
     
-    [SerializeField] private float staminaOffTimer = 5f;
-
+    
+    [Header ("Bike")]
     [SerializeField] private Rigidbody2D frontTireRB;
     [SerializeField] private Rigidbody2D backTireRB;
     [SerializeField] public Rigidbody2D bmxRB;
     [SerializeField] public Transform bmxTF;
+    [SerializeField] private float bmxSpeed = 200f;
+    [SerializeField, Range(0f, 500)] private float rotationSpeed = 100f;
+
+    [Header ("Ground")]
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private float rayDistance = 0.1f;
 
-    [SerializeField] private float bmxSpeed = 200f;
-    [SerializeField, Range(0f, 500)] private float rotationSpeed = 100f;
-    [SerializeField] public float moveInputX, moveInputY;
+    [Header ("Input")]
+    public bool canInput = true;
+    [SerializeField] public float moveInputX;
+    [SerializeField] public float moveInputY;
 
-    //stamina
+    [Header("Stamina")]
     [SerializeField] public float maxStamina = 100f;
     [SerializeField] public float stamina;
+    [SerializeField] private float staminaCostMultiple = 5f;
 
-    //distance
-    [SerializeField] private TextMeshProUGUI distanceText;
-    
+    [Header("Start Position")]
     private Vector2 startPosition;
-    [SerializeField] private float staminaCostMultiple=5f;
 
-    //is ground
+    [Header ("Is UpsideDown")]
     public bool isGround = false;
     public Vector3 upsidedPositions;
-    public bool canInput=true;
+
+    [Header ("Others")]
     [SerializeField] public bool inGame;
 
     [SerializeField] private float timer = 5f;
+    [SerializeField] private float staminaOffTimer = 5f;
 
     [SerializeField] private Animator animator;
 
@@ -60,20 +65,22 @@ public class RideBMX : MonoBehaviour
     }
 
     private void Update()
-    {        
+    {
+        Debug.Log(inGame);
+
             HandleInput();
             MeasuringDistance();
             NormalizeTheBike();
             UiManager.uiScript.UpdatingStaminaMeterUI();
+            
     }
 
     private void FixedUpdate()
     {
-        MovingTires();
-        StaminaOff();
-        DecreseStamina();
-        AnimatonPlayer();
-        
+            MovingTires();
+            StaminaOff();
+            DecreseStamina();
+            AnimatonPlayer();
     }
     private void HandleInput()
     {
@@ -106,11 +113,8 @@ public class RideBMX : MonoBehaviour
         canInput = false;
         moveInputX = 0;
         moveInputY = 0;
-        canInput = false;
-        Timer.timerScript.isBMXTimerWorking = false;
-
-
-
+        
+        
         UiManager.uiScript.staminaOffGO.SetActive(true);
         if (staminaOffTimer > 0f)
         {
@@ -119,19 +123,20 @@ public class RideBMX : MonoBehaviour
         }
         else if (staminaOffTimer <= 0f)
         {
-            Debug.Log("aaaaaaa");
+            Timer.timerScript.isBMXTimerWorking = false;
+
+            bmxSpeed = 0f;
+            bmxRB.angularVelocity = 0f;
+            backTireRB.angularVelocity = 0f;
+            frontTireRB.angularVelocity = 0f;
+            bmxRB.velocity = Vector2.zero;
+            backTireRB.velocity = Vector2.zero;
+            frontTireRB.velocity = Vector2.zero;
+            Time.timeScale = 0f;
+
             UiManager.uiScript.staminaOffGO.SetActive(false);
             StartCoroutine(EndGame(false));
         }
-
-        /*bmxRB.angularVelocity = 0f;
-        backTireRB.angularVelocity = 0f;
-        frontTireRB.angularVelocity = 0f;
-        bmxRB.velocity = Vector2.zero;
-        backTireRB.velocity = Vector2.zero;
-        frontTireRB.velocity = Vector2.zero;*/
-
-
     }
 
     private void NormalizeTheBike()
@@ -153,10 +158,9 @@ public class RideBMX : MonoBehaviour
         else
         {
             UiManager.uiScript.UpSideDownAndStaminaOffUI(true);
+            
             StartCoroutine(EndGame(false));
         }
-        
-        
     }
 
     private void FixBike()
@@ -229,10 +233,13 @@ public class RideBMX : MonoBehaviour
     }
     public IEnumerator EndGame(bool isWin)
     {
+        ClearUI();
+        inGame = false;
         Debug.Log("Girdi uğlumuz");
-        yield return new WaitForSecondsRealtime(timer);
+        yield return new WaitForSecondsRealtime(0.5f);
         Timer.timerScript.isBMXTimerWorking = false;
-        Time.timeScale = 0f;
+        canInput = false;
+
         if (isWin)
         {
             Debug.Log("NO WAAAAY");//win
@@ -248,11 +255,16 @@ public class RideBMX : MonoBehaviour
             UiManager.uiScript.congratsOrBlameUI.text = "Boooo";//Niggas in Paris
             
         }
-
-
-
     }
 
+    void ClearUI()
+    {
+        UiManager.uiScript.staminaOffGO.SetActive(false);
+        UiManager.uiScript.upsideDownUI.SetActive(false);
+
+        //UiManager.uiScript.upSideDownAndStaminaOffUI.SetActive(false);
+
+    }
     public void RefullStamina(float staminaAdd)
     {
         staminaOffTimer = 5f;

@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Runtime.CompilerServices;
 using TMPro;
 using UnityEngine;
 
@@ -16,9 +17,14 @@ public class GameManager : MonoBehaviour
     [Header("Pause Menu")]
     [SerializeField] private GameObject pauseMenu;
     public static bool isPaused = false;
-
     [SerializeField] private GameObject countDownUI;
     [SerializeField] public TextMeshProUGUI countDownText;
+
+    [Header("Game Finished Screen")]
+    [SerializeField] private GameObject gameFinishedScreen;
+    [SerializeField] private TextMeshProUGUI gameFinishedHeaderText;
+    [SerializeField] private TextMeshProUGUI gameFinishedText;
+    public bool isWon;
 
     void Start()
     {
@@ -29,6 +35,7 @@ public class GameManager : MonoBehaviour
 
         pauseMenu.SetActive(false);
         countDownUI.SetActive(false);
+        gameFinishedScreen.SetActive(false);
 
         StartGame();
         startPanel.SetActive(true);
@@ -38,7 +45,7 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape)&& PlayerScript.playerScript.inGame)
         {
             if (isPaused)
             {
@@ -135,13 +142,36 @@ public class GameManager : MonoBehaviour
     public void EndGame(bool isWin)
     {
         // End game logic
+        AiScript.aiScript.isAvailable = false;
+        PlayerScript.playerScript.currentSpeed = 0f;
+        AiScript.aiScript.currentSpeed = 0f;
+        PlayerScript.playerScript.inGame = false;
         if (isWin)
         {
+            isWon = true;
             Debug.Log("You win");
+            gameFinishedScreen.SetActive(true);
+            gameFinishedHeaderText.text = "You Won";
+            gameFinishedText.text = "You finished the relay race in 1st place.";
         }
         else
         {
+            isWon=false;
             Debug.Log("Lose");
+            gameFinishedScreen.SetActive(true);
+            gameFinishedHeaderText.text = "You Lost";
+            gameFinishedText.text = "You couldn't finish the relay race in 1st place, you lost.";
+        }
+    }
+    public void  GoToAtariMenuAfterGameFinished()
+    {
+        if (isWon)
+        {
+
+        }
+        else
+        {
+
         }
     }
 }

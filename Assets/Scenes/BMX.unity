@@ -7475,28 +7475,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50d7bf3f7afc42840b1ea842316757dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  staminaOffTimer: 0
   frontTireRB: {fileID: 1575199505}
   backTireRB: {fileID: 2016486829}
   bmxRB: {fileID: 934950169}
   bmxTF: {fileID: 934950168}
+  bmxSpeed: 150
+  rotationSpeed: 150
   groundLayer:
     serializedVersion: 2
     m_Bits: 1024
   rayDistance: 0.35
-  bmxSpeed: 150
-  rotationSpeed: 150
+  canInput: 1
   moveInputX: 0
   moveInputY: 0
   maxStamina: 100
   stamina: 0
-  distanceText: {fileID: 0}
   staminaCostMultiple: 5
   isGround: 0
   upsidedPositions: {x: 0, y: 0, z: 0}
-  canInput: 1
   inGame: 0
   timer: 2
+  staminaOffTimer: 5
   animator: {fileID: 678189911}
 --- !u!1001 &983846002
 PrefabInstance:
@@ -8307,7 +8306,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 49.25}
+  m_AnchoredPosition: {x: 0, y: -4.56}
   m_SizeDelta: {x: 530.5, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1220093057
@@ -8498,13 +8497,13 @@ RectTransform:
   - {fileID: 1735346794}
   - {fileID: 500273768}
   - {fileID: 1360365634}
-  - {fileID: 482036310}
   - {fileID: 1082829264}
   - {fileID: 771333158}
+  - {fileID: 482036310}
   - {fileID: 289220506}
   - {fileID: 2060716290}
-  - {fileID: 1080806027}
   - {fileID: 1716653725}
+  - {fileID: 1080806027}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
