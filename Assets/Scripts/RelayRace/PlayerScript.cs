@@ -70,8 +70,15 @@ public class PlayerScript : MonoBehaviour
     [SerializeField] private TextMeshProUGUI timerText;
     [SerializeField] private GameObject timer;*/
 
+    [Header("SoundEffect")]
+    private AudioSource audioSource;
+    [SerializeField] private AudioClip runingSFX;
+    [SerializeField] private AudioClip passingStafetCloseSFX;
+    public bool isMatruskaClose = false;
+
     void Start()
     {
+        
         if (playerScript == null)
         {
             playerScript = this;
@@ -83,6 +90,7 @@ public class PlayerScript : MonoBehaviour
         
 
         currentSpeed = minSpeed;
+        audioSource = GetComponent<AudioSource>();
         InvokeRepeating("DecaySpeed", 1.0f, 1.0f);
     }
 
@@ -107,6 +115,7 @@ public class PlayerScript : MonoBehaviour
             HandleInput();
             MoveToNextWaypoint();
             ChangeAnimationDueToWayPoint();
+            
         }
         else
         {
@@ -127,6 +136,7 @@ public class PlayerScript : MonoBehaviour
                 {
                     lastKeyWasA = true;
                     IncreaseSpeed();
+
                 }
                 else
                 {
@@ -151,6 +161,8 @@ public class PlayerScript : MonoBehaviour
     private void IncreaseSpeed()
     {
         if (isInQuickTimeEvent) return;
+
+        PlaySound(runingSFX);
         currentSpeed = Mathf.Clamp(currentSpeed + acceleration, minSpeed, maxSpeed);
     }
 
@@ -415,6 +427,7 @@ public class PlayerScript : MonoBehaviour
     private IEnumerator MatryoshkaAnim()
     {
         AnimationManager(matryoshkaPlayer);
+        PlaySound(passingStafetCloseSFX);
         yield return new WaitForSeconds(2f);
        
         resutltOfQTE.SetActive(false);
@@ -435,5 +448,10 @@ public class PlayerScript : MonoBehaviour
     private void UpdatingUI()
     {
         SpeedUIText.text = "Your speed: "+currentSpeed.ToString("F1");
+    }
+
+    public void PlaySound(AudioClip clip)
+    {
+        audioSource.PlayOneShot(clip);
     }
 }

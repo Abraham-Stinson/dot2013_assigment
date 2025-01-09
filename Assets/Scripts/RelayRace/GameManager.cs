@@ -30,6 +30,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject Starter;
     [SerializeField] private Animator StarterAnimator;
 
+    [Header("Starter")]
+    [SerializeField] private AudioSource starterAudio;
+
     void Start()
     {
         if (gameManagerScript == null)
@@ -84,6 +87,7 @@ public class GameManager : MonoBehaviour
         if (!isGameStarted)
         {
             StarterAnimator.Play("relayRaceStartAnim");
+            starterAudio.Play();
         }
         isGameStarted = true;
         Time.timeScale = 1f;
