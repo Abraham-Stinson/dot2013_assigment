@@ -62,6 +62,8 @@ public class AiController : MonoBehaviour
     const string ai_stun = "ai_stun";
     const string ai_Passed_Out = "ai_passed_out";
 
+    public SpriteRenderer aiSpriteRenderer;
+
     private void Awake()
     {
         if (aiScript == null)
@@ -71,15 +73,17 @@ public class AiController : MonoBehaviour
     }
     void Start()
     {
-        
+        aiSpriteRenderer = GetComponent<SpriteRenderer>();
         animator = gameObject.GetComponent<Animator>();
         AnimationClip[] clips = animator.runtimeAnimatorController.animationClips;
-
+        
         aiCombatStatusUI.text = "";
         aiStunnedUI.text = "start and no stun";
         aiMovementStatusUI.text = " ";
         aiIsHit.text = "is hit: no";
         distancePlayer.text="";
+
+        
     }
     private void Update()
     {
@@ -302,10 +306,10 @@ public class AiController : MonoBehaviour
                     Debug.Log("Player_1 Defended the AI's top attack");
                     staminaAI -= 5;
                 }
-                else if (Player_Movement_Combat.playerScript.playerStatusCombat == "top_Attack")
+                /*else if (Player_Movement_Combat.playerScript.playerStatusCombat == "top_Attack")
                 {
                     Debug.Log("Kılıçlar çarpışır topraaam");
-                }
+                }*/
                 else if (!Player_Movement_Combat.playerScript.isPlayerTakeDamage && !isAiTakeDamage)
                 {
                     //Animation is here
@@ -339,10 +343,10 @@ public class AiController : MonoBehaviour
                     Debug.Log("Player_1 Defended the AI's bottom attack");
                     staminaAI -= 5;
                 }
-                else if (Player_Movement_Combat.playerScript.playerStatusCombat== "bottom_Attack")
+                /*else if (Player_Movement_Combat.playerScript.playerStatusCombat== "bottom_Attack")
                 {
                     Debug.Log("Kılıçlar çarpışır topraaam");
-                }
+                }*/
                 else if (!Player_Movement_Combat.playerScript.isPlayerTakeDamage&&!isAiTakeDamage)
                 {
                     //Animation is here
@@ -359,6 +363,7 @@ public class AiController : MonoBehaviour
     private IEnumerator HittingEvent()
     {
         yield return new WaitForSeconds(0.5f);
+        Player_Movement_Combat.playerScript.playerSprite.color = Color.red;
         Round_Manager.roundManagerScript.EndRound("ai");
     }
 
@@ -406,14 +411,15 @@ public class AiController : MonoBehaviour
         //stun animation
         isStunned = true;
         canDoSomething = false;
-
+        aiSpriteRenderer.color = Color.magenta;
         aiMovementStatusUI.text = "stun";
         aiStunnedUI.text = "stunned";
-        AnimationManager("ai_stun");
+        //AnimationManager("ai_stun");
         yield return new WaitForSeconds(stunDuration);
 
         isStunned = false;
         canDoSomething = true;
+        aiSpriteRenderer.color = Color.white;
     }
 
     public void AiUpdatingUI()
