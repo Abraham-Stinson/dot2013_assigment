@@ -40,6 +40,8 @@ public class Boxing : MonoBehaviour
     }
     void CinRandomPunch1()
     {
+        meteors.SetActive(false);
+        meteors.transform.position = new Vector3(0, 0, 0);
         //cin.transform.localScale = new Vector3(3.217957f, 3.217957f, 3.217957f);
         if (cinToDo=="Hit")
         {
@@ -56,20 +58,24 @@ public class Boxing : MonoBehaviour
         if (cinToDo=="Red")
         {
             meteors.SetActive(true);
-           
+            Invoke("CinRandomPunch2", 6f);
         }
         if (cinToDo == "Green")
         {
             cinHealth += 200;
+            Invoke("CinRandomPunch2", 9f);
         }
         if (cinToDo == "Yellow")
         {
-
+            Invoke("CinRandomPunch2", 2f);
         }
        
     }
     void CinRandomPunch2()
     {
+        meteors.SetActive(false);
+        meteors.transform.position = new Vector3(0, 0, 0);
+        cin.transform.localScale = new Vector3(3.217957f, 3.217957f, 3.217957f);
         if (cinToDo=="Hit")
         {
             cin.transform.localScale = new Vector3(3.217957f, 3.217957f, 3.217957f);
@@ -79,15 +85,17 @@ public class Boxing : MonoBehaviour
         }
         if (cinToDo == "Red")
         {
-
+            meteors.SetActive(true);
+            Invoke("CinRandomPunch1", 6f);
         }
         if (cinToDo == "Green")
         {
-
+            cinHealth += 200;
+            Invoke("CinRandomPunch1", 9f);
         }
         if (cinToDo == "Yellow")
         {
-
+            Invoke("CinRandomPunch1", 2f);
         }
     }
     void RandomCinTransform1()
