@@ -82,6 +82,14 @@ public class Player_Movement_Combat : MonoBehaviour
     [SerializeField] float nextAttackTime = 0f;
 
     public SpriteRenderer playerSprite;
+
+    [Header("Sounds and Musics")]
+    [SerializeField] private AudioClip hitSoundPlayer;
+    [SerializeField] private AudioClip chamberSoundPlayer;
+    [SerializeField] private AudioClip deadSoundPlayer;
+    private AudioSource auidoSourcePlayer;
+
+
     private void Awake()
     {
         if (playerScript == null)
@@ -92,11 +100,12 @@ public class Player_Movement_Combat : MonoBehaviour
 
     void Start()
     {
+        auidoSourcePlayer = GetComponent<AudioSource>();
         playerSprite = GetComponent<SpriteRenderer>();
         animator = gameObject.GetComponent<Animator>();
         AnimationClip[] clips = animator.runtimeAnimatorController.animationClips;
 
-        stunnedUI.text = "start and no stun";
+        stunnedUI.text = "";
         combatStatusUI.text = "";
         movementStatusUI.text = " ";
         isHit.text = "hit: no";
@@ -362,7 +371,7 @@ public class Player_Movement_Combat : MonoBehaviour
     {
         StaminaCost(20f);
         playerStatusCombat = "top_Attack";
-        
+        PlaySound(hitSoundPlayer);
 
         Collider2D[] hitEnemy = Physics2D.OverlapCircleAll(attackPointTop.position, attackRangeTop, oppositePlayer);
         foreach (Collider2D Player_2 in hitEnemy)
@@ -371,6 +380,7 @@ public class Player_Movement_Combat : MonoBehaviour
             {
                 stamina -= 5;
                 Debug.Log("AI Defended the Player_1's top attack");
+                PlaySound(chamberSoundPlayer);
             }
             /*else if (AiController.aiScript.aiStatusCombat == "top_Attack")
             {
@@ -391,6 +401,7 @@ public class Player_Movement_Combat : MonoBehaviour
     {
         StaminaCost(20f);
         playerStatusCombat = "bottom_Attack";
+        PlaySound(hitSoundPlayer);
 
         Collider2D[] hitEnemy = Physics2D.OverlapCircleAll(attackPointBottom.position, attackRangeBottom, oppositePlayer);
         foreach (Collider2D Player_2 in hitEnemy)
@@ -399,6 +410,7 @@ public class Player_Movement_Combat : MonoBehaviour
             {
                 stamina -= 5;
                 Debug.Log("AI Defended the Player_1's bottom attack");
+                PlaySound(chamberSoundPlayer);
             }
             /*else if (AiController.aiScript.aiStatusCombat == "bottom_Attack")
             {
@@ -418,6 +430,7 @@ public class Player_Movement_Combat : MonoBehaviour
     {
 
         //Time.timeScale = 0f;
+        AiController.aiScript.PlaySound(deadSoundPlayer);
         AiController.aiScript.aiSpriteRenderer.color = Color.red;
         yield return new WaitForSecondsRealtime(0.5f);
         Round_Manager.roundManagerScript.EndRound("player");
@@ -466,13 +479,13 @@ public class Player_Movement_Combat : MonoBehaviour
     {
         canMove = false;
         canAttackOrDefend = false;
-        stunnedUI.text = "stunned";
+        stunnedUI.text = "stun";
         playerStatusMoving = "stun";
         playerSprite.color = Color.magenta;
         // AnimationManager("player_stun");
         yield return new WaitForSeconds(stunDuration);
         playerSprite.color = Color.white;
-        stunnedUI.text = "no stunned";
+        stunnedUI.text = "";
         canMove = true;
         canAttackOrDefend = true;
     }
@@ -531,6 +544,11 @@ public class Player_Movement_Combat : MonoBehaviour
     private void AttackCoolDown()
     {
         nextAttackTime = Time.time + attackCoolDown;
+    }
+
+    public void PlaySound(AudioClip clip)
+    {
+        auidoSourcePlayer.PlayOneShot(clip);
     }
 }
 

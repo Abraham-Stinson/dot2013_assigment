@@ -46,7 +46,7 @@ public class RideBMX : MonoBehaviour
     [Header ("Others")]
     [SerializeField] public bool inGame;
 
-    [SerializeField] private float timer = 5f;
+    //[SerializeField] private float timer = 5f;
     [SerializeField] private float staminaOffTimer = 5f;
 
     [SerializeField] private Animator animator;
