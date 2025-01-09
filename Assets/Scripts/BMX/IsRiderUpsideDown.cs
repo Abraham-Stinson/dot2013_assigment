@@ -9,8 +9,11 @@ public class IsRiderUpsideDown : MonoBehaviour
     public float timer = 0;
     public bool isWorkTimer = false;
     [SerializeField] public bool firstTouch;
+
+    public SpriteRenderer riderRender;
     void Start()
     {
+        riderRender = GetComponent<SpriteRenderer>();
         firstTouch = true;
         if (isRiderUpsideDownScript == null)
         {
@@ -49,6 +52,7 @@ public class IsRiderUpsideDown : MonoBehaviour
             RideBMX.rideBMXScript.inGame = false;
             Timer.timerScript.isBMXTimerWorking = false;
             isWorkTimer = true;
+            riderRender.color = Color.red;
         }
     } 
 }

@@ -165,6 +165,7 @@ public class RideBMX : MonoBehaviour
 
     private void FixBike()
     {
+        IsRiderUpsideDown.isRiderUpsideDownScript.riderRender.color = Color.white;
         transform.rotation = Quaternion.Euler(0, 0, 0);
         transform.position = new Vector3(upsidedPositions.x, upsidedPositions.y + 0.5f, 0);
         stamina -= 10;

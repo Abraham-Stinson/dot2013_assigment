@@ -80,6 +80,8 @@ public class Player_Movement_Combat : MonoBehaviour
 
     [SerializeField] private float attackCoolDown = 0.5f;
     [SerializeField] float nextAttackTime = 0f;
+
+    public SpriteRenderer playerSprite;
     private void Awake()
     {
         if (playerScript == null)
@@ -90,6 +92,7 @@ public class Player_Movement_Combat : MonoBehaviour
 
     void Start()
     {
+        playerSprite = GetComponent<SpriteRenderer>();
         animator = gameObject.GetComponent<Animator>();
         AnimationClip[] clips = animator.runtimeAnimatorController.animationClips;
 
@@ -97,6 +100,8 @@ public class Player_Movement_Combat : MonoBehaviour
         combatStatusUI.text = "";
         movementStatusUI.text = " ";
         isHit.text = "hit: no";
+
+        
     }
 
     void Update()
@@ -367,10 +372,10 @@ public class Player_Movement_Combat : MonoBehaviour
                 stamina -= 5;
                 Debug.Log("AI Defended the Player_1's top attack");
             }
-            else if (AiController.aiScript.aiStatusCombat == "top_Attack")
+            /*else if (AiController.aiScript.aiStatusCombat == "top_Attack")
             {
                 Debug.Log("Kılıçlar çarpışır topraaam");
-            }
+            }*/
             else if(!AiController.aiScript.isAiTakeDamage)
             {
                 //Animation is here
@@ -395,10 +400,10 @@ public class Player_Movement_Combat : MonoBehaviour
                 stamina -= 5;
                 Debug.Log("AI Defended the Player_1's bottom attack");
             }
-            else if (AiController.aiScript.aiStatusCombat == "bottom_Attack")
+            /*else if (AiController.aiScript.aiStatusCombat == "bottom_Attack")
             {
                 Debug.Log("Kılıçlar çarpışır topraaam");
-            }
+            }*/
             else if (!AiController.aiScript.isAiTakeDamage)
             {
                 //Animation is here
@@ -411,8 +416,9 @@ public class Player_Movement_Combat : MonoBehaviour
     }
     private IEnumerator HittingEvent()
     {
-        
+
         //Time.timeScale = 0f;
+        AiController.aiScript.aiSpriteRenderer.color = Color.red;
         yield return new WaitForSecondsRealtime(0.5f);
         Round_Manager.roundManagerScript.EndRound("player");
 
@@ -446,7 +452,7 @@ public class Player_Movement_Combat : MonoBehaviour
     // Idle
     void AttackIdle()
     {
-        AnimationManager("attack_idle");
+        //AnimationManager("attack_idle");
         playerStatusCombat = "attack_Idle";
     }
 
@@ -462,8 +468,10 @@ public class Player_Movement_Combat : MonoBehaviour
         canAttackOrDefend = false;
         stunnedUI.text = "stunned";
         playerStatusMoving = "stun";
-        AnimationManager("player_stun");
+        playerSprite.color = Color.magenta;
+        // AnimationManager("player_stun");
         yield return new WaitForSeconds(stunDuration);
+        playerSprite.color = Color.white;
         stunnedUI.text = "no stunned";
         canMove = true;
         canAttackOrDefend = true;
@@ -515,7 +523,7 @@ public class Player_Movement_Combat : MonoBehaviour
         {
             return;
         }
-
+        Debug.Log(newState);
         animator.Play(newState);
         currentState = newState;
     }

@@ -129,6 +129,9 @@ public class Round_Manager : MonoBehaviour
         playerTransform.position = playerStartPos;
         aiTransform.position = aiStartPos;
 
+        AiController.aiScript.aiSpriteRenderer.color = Color.white;
+        Player_Movement_Combat.playerScript.playerSprite.color = Color.white;
+
         AiController.aiScript.canDoSomething = true;
         Player_Movement_Combat.playerScript.canAttackOrDefend = true;
 

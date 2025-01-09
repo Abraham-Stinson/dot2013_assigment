@@ -5054,6 +5054,7 @@ MonoBehaviour:
   isPlayerTakeDamage: 0
   attackCoolDown: 1
   nextAttackTime: 0
+  playerSprite: {fileID: 1596073007}
 --- !u!95 &1596073012
 Animator:
   serializedVersion: 5
@@ -5986,6 +5987,7 @@ MonoBehaviour:
   maxStamina: 100
   staminaRegenSpeed: 10
   isAiTakeDamage: 0
+  aiSpriteRenderer: {fileID: 1936304923}
 --- !u!95 &1936304929
 Animator:
   serializedVersion: 5

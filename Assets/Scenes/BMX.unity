@@ -2866,7 +2866,7 @@ MonoBehaviour:
   m_AdaptiveUV: 1
   m_StretchUV: 0
   m_WorldSpaceUV: 0
-  m_CornerAngleThreshold: 30
+  m_CornerAngleThreshold: 32.8
   m_ColliderDetail: 16
   m_ColliderOffset: 0.481
   m_UpdateCollider: 1
@@ -6605,6 +6605,7 @@ MonoBehaviour:
   timer: 0
   isWorkTimer: 0
   firstTouch: 0
+  riderRender: {fileID: 0}
 --- !u!70 &678189910
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
