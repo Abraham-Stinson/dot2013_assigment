@@ -482,6 +482,7 @@ MonoBehaviour:
   pointTextObj: {fileID: 2053183153}
   shootAreaObj: {fileID: 1127552148}
   gunFireSound: {fileID: 1292086532}
+  timerTextObj: {fileID: 449355421}
   shootingSlider: {fileID: 992948294}
   sliderShootRandomValue: 0
   polarBear: {fileID: 1126152467}
