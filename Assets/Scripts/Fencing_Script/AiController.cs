@@ -64,6 +64,11 @@ public class AiController : MonoBehaviour
 
     public SpriteRenderer aiSpriteRenderer;
 
+    [Header("Sounds and Musics")]
+    [SerializeField] public AudioClip hitSoundAI;
+    [SerializeField] public AudioClip chamberSoundAI;
+    [SerializeField] public AudioClip deadSoundAI;
+    private AudioSource auidoSourceAI;
     private void Awake()
     {
         if (aiScript == null)
@@ -78,12 +83,12 @@ public class AiController : MonoBehaviour
         AnimationClip[] clips = animator.runtimeAnimatorController.animationClips;
         
         aiCombatStatusUI.text = "";
-        aiStunnedUI.text = "start and no stun";
+        aiStunnedUI.text = "";
         aiMovementStatusUI.text = " ";
         aiIsHit.text = "is hit: no";
         distancePlayer.text="";
 
-        
+        auidoSourceAI = GetComponent<AudioSource>();
     }
     private void Update()
     {
@@ -297,12 +302,14 @@ public class AiController : MonoBehaviour
             staminaAI -= 20f;
             aiStatusCombat = "top attacking";
             AnimationManager("ai_top_attack");
+            PlaySound(hitSoundAI);
             //yield return new WaitForSeconds(1f);
             Collider2D[] hitPlayer = Physics2D.OverlapCircleAll(attackPointTopAI.position, attackRangeTop, oppositePlayerAI);
             foreach (Collider2D Player_1 in hitPlayer)
             { 
                 if (Player_Movement_Combat.playerScript.playerStatusCombat == "top_Defence")
                 {
+                    PlaySound(chamberSoundAI);
                     Debug.Log("Player_1 Defended the AI's top attack");
                     staminaAI -= 5;
                 }
@@ -333,13 +340,13 @@ public class AiController : MonoBehaviour
             staminaAI -= 20f;
             aiStatusCombat = "bot_attacking";
             AnimationManager("ai_bottom_attack");
-
+            PlaySound(hitSoundAI);
             Collider2D[] hitPlayer = Physics2D.OverlapCircleAll(attackPointBottomAI.position, attackRangeBottom, oppositePlayerAI);
             foreach (Collider2D Player_1 in hitPlayer)
             {
                 if (Player_Movement_Combat.playerScript.playerStatusCombat == "bottom_Defence")
                 {
-
+                    PlaySound(chamberSoundAI);
                     Debug.Log("Player_1 Defended the AI's bottom attack");
                     staminaAI -= 5;
                 }
@@ -362,8 +369,10 @@ public class AiController : MonoBehaviour
 
     private IEnumerator HittingEvent()
     {
-        yield return new WaitForSeconds(0.5f);
+        Player_Movement_Combat.playerScript.PlaySound(deadSoundAI);
         Player_Movement_Combat.playerScript.playerSprite.color = Color.red;
+        yield return new WaitForSeconds(0.5f);
+        
         Round_Manager.roundManagerScript.EndRound("ai");
     }
 
@@ -413,7 +422,7 @@ public class AiController : MonoBehaviour
         canDoSomething = false;
         aiSpriteRenderer.color = Color.magenta;
         aiMovementStatusUI.text = "stun";
-        aiStunnedUI.text = "stunned";
+        aiStunnedUI.text = "stun";
         //AnimationManager("ai_stun");
         yield return new WaitForSeconds(stunDuration);
 
@@ -438,7 +447,7 @@ public class AiController : MonoBehaviour
         }
         else
         {
-            aiStunnedUI.text = "no stunned";
+            aiStunnedUI.text = "";
             
             //aiStatusCombat = "idle";
             aiStatusMoving = "idle";
@@ -496,6 +505,11 @@ public class AiController : MonoBehaviour
         {
             aiStatusMoving = newState;
         }
+    }
+
+    public void PlaySound(AudioClip clip)
+    {
+        auidoSourceAI.PlayOneShot(clip);
     }
 
 }

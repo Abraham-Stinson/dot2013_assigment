@@ -48,6 +48,10 @@ public class Round_Manager : MonoBehaviour
     private Vector3 playerStartPos;
     private Vector3 aiStartPos;
 
+
+    private AudioSource audioSource;
+
+
     private void Awake()
     {
         if (roundManagerScript == null)
@@ -57,6 +61,7 @@ public class Round_Manager : MonoBehaviour
     }
     void Start()
     {
+        
         playerStartPos = playerTransform.position;
         aiStartPos = aiTransform.position;
         setCounter = 1;
@@ -64,6 +69,10 @@ public class Round_Manager : MonoBehaviour
         //afterHitUI.SetActive(false);
         betweenSet.SetActive(false);
         finishUI.SetActive(false);
+
+        audioSource = GetComponent<AudioSource>();
+
+        audioSource.Play();
     }
 
     private void Update()
@@ -291,5 +300,7 @@ public class Round_Manager : MonoBehaviour
         aiScoreText.text = "Score: " + aiScore;
         
     }
+
+    
 
 }

@@ -26,6 +26,13 @@ public class GameManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI gameFinishedText;
     public bool isWon;
 
+    [Header("Start Animation")]
+    [SerializeField] private GameObject Starter;
+    [SerializeField] private Animator StarterAnimator;
+
+    [Header("Starter")]
+    [SerializeField] private AudioSource starterAudio;
+
     void Start()
     {
         if (gameManagerScript == null)
@@ -45,7 +52,7 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape)&& PlayerScript.playerScript.inGame)
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
             if (isPaused)
             {
@@ -64,6 +71,7 @@ public class GameManager : MonoBehaviour
         {
             Time.timeScale = 0f;
             StartCoroutine(StartCountdown());
+            
         }
     }
 
@@ -76,7 +84,11 @@ public class GameManager : MonoBehaviour
         }
         countdownText.text = "GO!";
         yield return new WaitForSecondsRealtime(1f);
-
+        if (!isGameStarted)
+        {
+            StarterAnimator.Play("relayRaceStartAnim");
+            starterAudio.Play();
+        }
         isGameStarted = true;
         Time.timeScale = 1f;
         startPanel.SetActive(false);
@@ -146,6 +158,7 @@ public class GameManager : MonoBehaviour
         PlayerScript.playerScript.currentSpeed = 0f;
         AiScript.aiScript.currentSpeed = 0f;
         PlayerScript.playerScript.inGame = false;
+        Time.timeScale = 0;
         if (isWin)
         {
             isWon = true;
