@@ -255,7 +255,11 @@ public class Boxing : MonoBehaviour
     }
     void SceneManagerVoid()
     {
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(6);
+    }
+    void SceneManagerVoid1()
+    {
+        SceneManager.LoadScene(7);
     }
     void FixedUpdate()
     {
@@ -267,7 +271,7 @@ public class Boxing : MonoBehaviour
         if (cinHealth<=0)
         {
             panelWin.SetActive(true);
-            Invoke("SceneManagerVoid", 5f);
+            Invoke("SceneManagerVoid1", 5f);
         }
         if (playerTextTxt.text == "Player: 3")
         {

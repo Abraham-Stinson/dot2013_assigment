@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    public GameObject oguzhaninki25cm;
     public float sensX;
     public float sensY;
     float xRotation;
@@ -13,7 +14,12 @@ public class Player : MonoBehaviour
     {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-        Screen.SetResolution(320, 240, Screen.fullScreen);
+        //Screen.SetResolution(320, 240, Screen.fullScreen);
+        Invoke("OguzhaninkisideFenaHa", 5f);
+    }
+    public void OguzhaninkisideFenaHa()
+    {
+        oguzhaninki25cm.SetActive(false);
     }
 
     // Update is called once per frame

@@ -23,4 +23,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Shooting_Game_Scene.unity
     guid: 16dd49adba10d294a8aec905284655f8
+  - enabled: 1
+    path: Assets/Scenes/EndGameLose 1.unity
+    guid: 87273d09ae5c8ce418345c23b866881c
+  - enabled: 1
+    path: Assets/Scenes/EndGameWin.unity
+    guid: 6267838af87c2984e8f03ff179e33950
   m_configObjects: {}

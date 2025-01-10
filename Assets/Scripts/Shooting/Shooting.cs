@@ -150,9 +150,12 @@ public class Shooting : MonoBehaviour
     }
     void MainMenu()
     {
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(6);
     }
-    
+    void MainMenu1()
+    {
+        SceneManager.LoadScene(7);
+    }
     void FixedUpdate()
     {
         timer -= (Time.deltaTime);
@@ -164,12 +167,14 @@ public class Shooting : MonoBehaviour
             if (points>=140)
             {
                 panel.SetActive(true);
+                Invoke("MainMenu1", 5f);
             }
             else
             {
                 panel2.SetActive(true);
+                Invoke("MainMenu", 5f);
             }
-            Invoke("MainMenu", 5f);
+           
         }
         if (Input.GetKey(KeyCode.Space))
         {
