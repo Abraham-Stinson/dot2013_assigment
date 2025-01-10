@@ -7243,8 +7243,12 @@ PrefabInstance:
       value: -8.7699995
       objectReference: {fileID: 0}
     - target: {fileID: 5475216639302243080, guid: 7e42d97429635cc4ca983c21531d5283, type: 3}
+      propertyPath: maxSpeed
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5475216639302243080, guid: 7e42d97429635cc4ca983c21531d5283, type: 3}
       propertyPath: acceleration
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 5542733557228780586, guid: 7e42d97429635cc4ca983c21531d5283, type: 3}
       propertyPath: m_LocalPosition.x
@@ -8566,7 +8570,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5475216639302243080, guid: 7e42d97429635cc4ca983c21531d5283, type: 3}
       propertyPath: acceleration
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8826831100020627756, guid: 7e42d97429635cc4ca983c21531d5283, type: 3}
       propertyPath: m_Name

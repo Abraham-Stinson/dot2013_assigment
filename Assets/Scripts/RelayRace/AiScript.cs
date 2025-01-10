@@ -48,14 +48,15 @@ public class AiScript : MonoBehaviour
         if (isAvailable) {
             MoveToNextWaypoint();
             ChangeAnimationDueToWayPoint();
+            
         }
-        animator.speed = currentSpeed / 2;
+        
     }
 
     private void ChangingSpeed()
     {
         int currentStation = Random.Range(1, 3);
-        
+        animator.speed = currentSpeed / 2;
         switch (currentStation)
         {
             case 1://acceleration
@@ -145,8 +146,10 @@ public class AiScript : MonoBehaviour
     {
         savedSpeed = currentSpeed;
         currentSpeed = 0;
-        yield return new WaitForSeconds(Random.Range(1f,2f));
-        currentSpeed = savedSpeed;
+        yield return new WaitForSeconds(Random.Range(3f,6f));
         AnimationManager(MatryskAnimAI);
+        currentSpeed = savedSpeed;
+        animator.speed= currentSpeed/3;
+        
     }
 }

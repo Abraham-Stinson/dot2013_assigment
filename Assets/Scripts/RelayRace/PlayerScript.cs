@@ -276,8 +276,6 @@ public class PlayerScript : MonoBehaviour
         savedSpeed = currentSpeed;
         currentSpeed = minSpeed;
 
-        comboTimerText.text = "3";
-        yield return new WaitForSeconds(1f);
         comboTimerText.text = "2";
         yield return new WaitForSeconds(1f);
         comboTimerText.text = "1";
