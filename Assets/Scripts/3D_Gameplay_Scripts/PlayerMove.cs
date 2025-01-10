@@ -17,7 +17,7 @@ public class PlayerMove : MonoBehaviour
     public LayerMask whatGround;
     bool grounded;
 
-    public GameObject panel;
+    public GameObject panel,ayakSes;
     public Transform orientation;
     float horizontalInput;
     float verticalInput;
@@ -54,7 +54,7 @@ public class PlayerMove : MonoBehaviour
     {
         if (nameField.text == "furkan")
         {
-            Debug.Log("sa");
+            SceneManager.LoadScene(8);
         }
     }
     private void Running()
@@ -72,7 +72,8 @@ public class PlayerMove : MonoBehaviour
     private void MovePlayer()
     {
         moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
-        rb.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Force); 
+        rb.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
+
     }
     private void SpeedControl()
     {

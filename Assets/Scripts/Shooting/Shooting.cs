@@ -164,7 +164,7 @@ public class Shooting : MonoBehaviour
         {
             //Time.timeScale = 0;
            
-            if (points>=140)
+            if (points>=100)
             {
                 panel.SetActive(true);
                 Invoke("MainMenu1", 5f);

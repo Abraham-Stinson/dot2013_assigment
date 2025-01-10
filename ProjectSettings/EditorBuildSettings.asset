@@ -29,4 +29,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/EndGameWin.unity
     guid: 6267838af87c2984e8f03ff179e33950
+  - enabled: 1
+    path: Assets/Scenes/EasterEgg.unity
+    guid: 141f57970a596154fba90e29ca9a4f09
   m_configObjects: {}
