@@ -4,10 +4,11 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class Shooting : MonoBehaviour
 {
-    public GameObject pointTextObj,shootAreaObj,gunFireSound,timerTextObj;
+    public GameObject pointTextObj,shootAreaObj,gunFireSound,timerTextObj,panel,panel2;
     public Slider shootingSlider;
     int sliderValue = 0,points,randomSide;
     float timer = 60;
@@ -147,6 +148,10 @@ public class Shooting : MonoBehaviour
         //g
         
     }
+    void MainMenu()
+    {
+        SceneManager.LoadScene(0);
+    }
     
     void FixedUpdate()
     {
@@ -154,7 +159,17 @@ public class Shooting : MonoBehaviour
         timerText.text = "Time Left: " + ((int)timer);
         if (timer<=0)
         {
-            Time.timeScale = 0;
+            //Time.timeScale = 0;
+           
+            if (points>=140)
+            {
+                panel.SetActive(true);
+            }
+            else
+            {
+                panel2.SetActive(true);
+            }
+            Invoke("MainMenu", 5f);
         }
         if (Input.GetKey(KeyCode.Space))
         {

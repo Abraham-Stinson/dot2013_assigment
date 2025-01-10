@@ -2,10 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class Boxing : MonoBehaviour
 {
-    public GameObject leftArea,meteors,leftCin,rightCin,middleCin, meteors2, meteors3, meteors4, meteors5;
+    public GameObject panelWin,panelLose,leftArea,meteors,leftCin,rightCin,middleCin, meteors2, meteors3, meteors4, meteors5;
     public GameObject MiddleArea;
     public GameObject RightArea;
     public GameObject Gloves;
@@ -91,22 +92,22 @@ public class Boxing : MonoBehaviour
             if (cinTransform == playerTransform && (isDodge == false))
             {
                 cinHits.SetActive(true); cinRed.SetActive(false); cinYellow.SetActive(false); cinGreen.SetActive(false); cinSpeak.SetActive(false);
-                if (playerTextTxt.text == "Player: 3")
+                if (playerTextTxt.text == "Player: 1")
                 {
-                    playerHealth = 2;
-                    playerTextTxt.text = "Player: 2";
+                    playerHealth = 0;
+                    playerTextTxt.text = "Player: 0";
                 }
                 if (playerTextTxt.text == "Player: 2")
                 {
                     playerHealth = 1;
                     playerTextTxt.text = "Player: 1";
                 }
-                if (playerTextTxt.text == "Player: 1")
+                if (playerTextTxt.text == "Player: 3")
                 {
-                    playerHealth = 0;
-                    playerTextTxt.text = "Player: 0";
+                    playerHealth = 2;
+                    playerTextTxt.text = "Player: 2";
                 }
-               // playerHealth -= 1;
+                // playerHealth -= 1;
             }
             cin.transform.localScale = new Vector3(5, 5, 5);
             canMove = false;
@@ -252,9 +253,22 @@ public class Boxing : MonoBehaviour
         cinToDoRandom = Random.Range(0, 4);
         Invoke("RandomCinTransform3", 5f);
     }
-
+    void SceneManagerVoid()
+    {
+        SceneManager.LoadScene(0);
+    }
     void FixedUpdate()
     {
+        if (playerHealth==0&& playerTextTxt.text == "Player: 0")
+        {
+            panelLose.SetActive(true);
+            Invoke("SceneManagerVoid", 5f);
+        }
+        if (cinHealth<=0)
+        {
+            panelWin.SetActive(true);
+            Invoke("SceneManagerVoid", 5f);
+        }
         if (playerTextTxt.text == "Player: 3")
         {
             playerHealth = 3;

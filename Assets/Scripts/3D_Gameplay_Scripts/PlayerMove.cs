@@ -2,12 +2,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class PlayerMove : MonoBehaviour
 {
     [Header("Movement")]
     public float moveSpeed;
-
+    public InputField nameField;
     public float groundDrag;
 
     [Header("Ground Check")]
@@ -15,7 +17,7 @@ public class PlayerMove : MonoBehaviour
     public LayerMask whatGround;
     bool grounded;
 
-
+    public GameObject panel;
     public Transform orientation;
     float horizontalInput;
     float verticalInput;
@@ -45,7 +47,15 @@ public class PlayerMove : MonoBehaviour
     private void FixedUpdate()
     {
         MovePlayer();
+        
         //Running();
+    }
+    public void InputField()
+    {
+        if (nameField.text == "furkan")
+        {
+            Debug.Log("sa");
+        }
     }
     private void Running()
     {
@@ -72,5 +82,48 @@ public class PlayerMove : MonoBehaviour
             Vector3 limitedVel = flatVel.normalized * moveSpeed;
             rb.velocity = new Vector3(limitedVel.x, rb.velocity.y, limitedVel.z);
         }
+    }
+    public void OnTriggerStay(Collider other)
+    {
+        if (other.gameObject.tag=="atari")
+        {
+            panel.SetActive(true);
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
+    }
+    public void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.tag == "atari")
+        {
+            panel.SetActive(false);
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
+    }
+    public void Fencing()
+    {
+        SceneManager.LoadScene(1);
+        Screen.SetResolution(1920, 1080, Screen.fullScreen);
+    }
+    public void Bmx()
+    {
+        SceneManager.LoadScene(2);
+        Screen.SetResolution(1920, 1080, Screen.fullScreen);
+    }
+    public void Boxing()
+    {
+        SceneManager.LoadScene(3);
+        Screen.SetResolution(1920, 1080, Screen.fullScreen);
+    }
+    public void Shooting()
+    {
+        SceneManager.LoadScene(5);
+        Screen.SetResolution(1920, 1080, Screen.fullScreen);
+    }
+    public void Runer()
+    {
+        SceneManager.LoadScene(4);
+        Screen.SetResolution(1920, 1080, Screen.fullScreen);
     }
 }
