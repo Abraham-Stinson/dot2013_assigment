@@ -6,12 +6,21 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/MainMenu.unity
-    guid: 785170149eacc3c4eb27250c08464ac7
-  - enabled: 1
     path: Assets/Scenes/3D_Gameplay_Scene.unity
     guid: f3850ead6e364574884b21c0d7b52bd9
   - enabled: 1
     path: Assets/Scenes/Fencing.unity
     guid: 2cda990e2423bbf4892e6590ba056729
+  - enabled: 1
+    path: Assets/Scenes/BMX.unity
+    guid: b7373f9e822ca204898c485045f945b8
+  - enabled: 1
+    path: Assets/Scenes/Boxing.unity
+    guid: 4ece3ebde99af7a45a5c2a2858f3a35f
+  - enabled: 1
+    path: Assets/Scenes/RelayRace.unity
+    guid: f1221d370ec09574284ed72ebefa03da
+  - enabled: 1
+    path: Assets/Scenes/Shooting_Game_Scene.unity
+    guid: 16dd49adba10d294a8aec905284655f8
   m_configObjects: {}
