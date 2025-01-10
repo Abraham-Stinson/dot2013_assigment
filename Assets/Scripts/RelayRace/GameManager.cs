@@ -2,6 +2,7 @@ using System.Collections;
 using System.Runtime.CompilerServices;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -32,6 +33,8 @@ public class GameManager : MonoBehaviour
 
     [Header("Starter")]
     [SerializeField] private AudioSource starterAudio;
+
+    public bool isPlayerWon=false;
 
     void Start()
     {
@@ -130,14 +133,19 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1f; // Zaman tekrar akt?
     }
 
-    public void GoToSettings()
-    {
-        // scene to settings
-    }
-
     public void GoToAtariMenu()
     {
-        // scene to atari menu
+        if (isPlayerWon)
+        {
+
+            SceneManager.LoadScene("3D_Gameplay_Scene");
+        }
+        else
+        {
+
+            SceneManager.LoadScene("3D_Gameplay_Scene");
+        }
+
         Time.timeScale = 1f;
     }
 
@@ -158,33 +166,26 @@ public class GameManager : MonoBehaviour
         PlayerScript.playerScript.currentSpeed = 0f;
         AiScript.aiScript.currentSpeed = 0f;
         PlayerScript.playerScript.inGame = false;
-        Time.timeScale = 0;
+        Time.timeScale = 0f;
         if (isWin)
         {
             isWon = true;
+            isPlayerWon = true;
             Debug.Log("You win");
             gameFinishedScreen.SetActive(true);
             gameFinishedHeaderText.text = "You Won";
             gameFinishedText.text = "You finished the relay race in 1st place.";
+            Time.timeScale = 0f;
         }
         else
         {
             isWon=false;
+            isPlayerWon = false;
             Debug.Log("Lose");
             gameFinishedScreen.SetActive(true);
             gameFinishedHeaderText.text = "You Lost";
             gameFinishedText.text = "You couldn't finish the relay race in 1st place, you lost.";
-        }
-    }
-    public void  GoToAtariMenuAfterGameFinished()
-    {
-        if (isWon)
-        {
-
-        }
-        else
-        {
-
+            Time.timeScale = 0f;
         }
     }
 }

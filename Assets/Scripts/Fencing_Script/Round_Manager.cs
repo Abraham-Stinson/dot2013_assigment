@@ -192,10 +192,12 @@ public class Round_Manager : MonoBehaviour
         if(win=="Player 1")
         {
             winningText.text = "You won, fighter.";
+            Pause_Menu.pauseMenuScript.isPlayerWon = true;
         }
         else
         {
-            winningText.text = "Loooser";
+            winningText.text = "You lost the fight, coward...";
+            Pause_Menu.pauseMenuScript.isPlayerWon = false;
         }
 
         //There will and return to atari menu for win or lose condition

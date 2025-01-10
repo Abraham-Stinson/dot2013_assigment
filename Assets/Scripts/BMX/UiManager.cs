@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class UiManager : MonoBehaviour
@@ -40,6 +41,8 @@ public class UiManager : MonoBehaviour
     [SerializeField] public TextMeshProUGUI statusWinLoseUI;
     [SerializeField] public TextMeshProUGUI congratsOrBlameUI;
     // Start is called before the first frame update
+
+    public bool isPlayerWon = false;
     void Start()
     {
         if (uiScript == null)
@@ -153,15 +156,19 @@ public class UiManager : MonoBehaviour
         RideBMX.rideBMXScript.inGame = true;
         Time.timeScale = 1f;
     }
-    public void GoToSettings()
-    {
-
-        //scene to settings
-    }
     public void GoToAtariMenu()
     {
 
-        //scene to atari menu
+        if (isPlayerWon)
+        {
+
+            SceneManager.LoadScene("3D_Gameplay_Scene");
+        }
+        else
+        {
+
+            SceneManager.LoadScene("3D_Gameplay_Scene");
+        }
         Time.timeScale = 1f;
     }
     public void GoToMainMenu()

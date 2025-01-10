@@ -243,6 +243,7 @@ public class RideBMX : MonoBehaviour
 
         if (isWin)
         {
+            UiManager.uiScript.isPlayerWon = true;
             Debug.Log("NO WAAAAY");//win
             UiManager.uiScript.winOrLoseUI.SetActive(true);
             UiManager.uiScript.statusWinLoseUI.text="Congrats you win";
@@ -250,6 +251,7 @@ public class RideBMX : MonoBehaviour
         }
         else
         {
+            UiManager.uiScript.isPlayerWon = false;
             Debug.Log("Loser");
             UiManager.uiScript.winOrLoseUI.SetActive(true);
             UiManager.uiScript.statusWinLoseUI.text = "Shame on you";

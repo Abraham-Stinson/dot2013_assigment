@@ -4,15 +4,17 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class Pause_Menu : MonoBehaviour
 {
     [SerializeField] private GameObject pauseMenu;
     [SerializeField] public static bool isPaused = false;
-    
+
     [SerializeField] private GameObject countDownUI;
     [SerializeField] public TextMeshProUGUI countDownText;
+    public bool isPlayerWon=false;
     
 
     public static Pause_Menu pauseMenuScript;
@@ -75,21 +77,21 @@ public class Pause_Menu : MonoBehaviour
         countDownUI.SetActive(false);
         Time.timeScale = 1f;
     }
-    public void GoToSettings()
-    {
 
-        //scene to settings
-    }
     public void GoToAtariMenu()
     {
+        if (isPlayerWon)
+        {
 
-        //scene to atari menu
+            SceneManager.LoadScene("3D_Gameplay_Scene");
+        }
+        else 
+        {
+
+            SceneManager.LoadScene("3D_Gameplay_Scene");
+        }
+        
         Time.timeScale = 1f;
-    }
-    public void GoToMainMenu()
-    {
-
-        //scene to main menu
     }
     public void QuitGame()
     {
