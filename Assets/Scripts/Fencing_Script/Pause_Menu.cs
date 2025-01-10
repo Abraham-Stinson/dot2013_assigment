@@ -83,14 +83,14 @@ public class Pause_Menu : MonoBehaviour
         if (isPlayerWon)
         {
 
-            SceneManager.LoadScene("3D_Gameplay_Scene");
+            SceneManager.LoadScene(7);
         }
-        else 
+        else
         {
 
-            SceneManager.LoadScene("3D_Gameplay_Scene");
+            SceneManager.LoadScene(6);
         }
-        
+
         Time.timeScale = 1f;
     }
     public void QuitGame()
