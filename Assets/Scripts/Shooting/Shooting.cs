@@ -21,7 +21,7 @@ public class Shooting : MonoBehaviour
     void Start()
     {
         sliderValue = ((int)shootingSlider.value);
-        sliderRandomValue = Random.Range(10, 50);
+        sliderRandomValue = Random.Range(60, 100);
         sliderShootRandomValue= Random.Range(0, 101);
         polarBearSpriteRenderer = polarBear.GetComponent<SpriteRenderer>();
         pointText= pointTextObj.GetComponent<Text>();
@@ -204,11 +204,15 @@ public class Shooting : MonoBehaviour
         PolarBearWalk();
         if (sliderShootRandomValue>=((int)shootingSlider.value))
         {
-            points += sliderShootRandomValue - ((int)shootingSlider.value);
+            //points += sliderShootRandomValue - ((int)shootingSlider.value);
+            int randomShoot = Random.Range(1, 11);
+            points+= randomShoot;
         }
         else if (sliderShootRandomValue < ((int)shootingSlider.value))
         {
-            points -= sliderShootRandomValue - ((int)shootingSlider.value);
+            //points -= sliderShootRandomValue - ((int)shootingSlider.value);
+            int randomShoot = Random.Range(1, 11);
+            points += randomShoot;
         }
         
        // isShootedBear = false;
